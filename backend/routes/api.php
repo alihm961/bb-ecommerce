@@ -19,12 +19,13 @@ Route::group(['prefix' => 'v1'], function () {
     Route::group(['middleware' => 'auth:api'], function() {
         Route::group(['prefix' => 'user'], function () {
             Route::post('/logout', [UserController::class, 'logout']);
-            Route::post('/orders', [OrderController::class, 'store']);
+            Route::post('/orders', [OrderController::class, 'create']);
 
         });
     
         Route::group(['prefix' => 'admin'], function () {
             Route::group(['middleware' => 'isAdmin'], function() {
+                Route::get('/users', [UserController::class, 'getUsers']);
                 Route::post('/create-product', [ProductController::class, 'create']);
                 Route::post('/update-product/{id}', [ProductController::class, 'update']);
             });

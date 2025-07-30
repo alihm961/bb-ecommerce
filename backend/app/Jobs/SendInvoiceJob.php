@@ -16,13 +16,25 @@ class SendInvoiceJob implements ShouldQueue
 
     public $order;
 
-    public function __construct($order)
-    {
+    public function __construct($order){
         $this->order = $order;
     }
 
-    public function handle(): void
-    {
-        Mail::to($this->order->user->mail)->send(new InvoiceMail($this->order));
+    public function handle(): void{
+
+        $order = $this->order;
+        $user = $order->user;
+        $email = $user->email;
+        
+        $text = "Thank you, {$user->name}!\n";
+        $text .= "Your order #{$order->id} has been placed.\n";
+        $text .= "Total: €{$order->price}\n";
+        $text .= "We will notify you when it’s shipped.";
+
+        Mail::raw($text, function($message) use($email) {
+            $message->to($email)
+                    ->subject('Your Order Invoice');
+        });
+
     }
 }

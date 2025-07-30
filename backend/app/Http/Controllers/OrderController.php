@@ -2,30 +2,21 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Services\OrderService;
+use App\Http\Requests\Order\OrderCreateRequest;
 use App\Traits\ApiResponseTrait;
 
-class OrderController extends Controller
-{
+class OrderController extends Controller{
+
     use ApiResponseTrait;
 
-    protected $orderService;
-
-    public function __construct(OrderService $orderService)
-    {
-        $this->orderService = $orderService;
-    }
-
-    public function store(Request $request)
-    {
-        $validated = $request->validate([
-            'user_id' => 'required|exists:users,id',
-            'total' => 'required|numeric|min:0',
-        ]);
-
-        $order = $this->orderService->place($validated);
-
-        return $this->responseJSON($order, 'Order placed and invoice sent', 201);
+    public function create(OrderCreateRequest $request){
+        try {
+            $order = OrderService::create($request);
+            if(!$order) return $this->responseJSON(null, 'Failed to add order', 500);
+            return $this->responseJSON($order, 'Order placed and invoice sent', 201);
+        } catch (\Throwable $th) {
+            return $this->responseJSON(null, 'Failed to add order', 500);
+        }
     }
 }

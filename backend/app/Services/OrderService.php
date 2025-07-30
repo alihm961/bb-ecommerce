@@ -3,17 +3,19 @@
 namespace App\Services;
 
 use App\Models\Order;
+use Illuminate\Http\Request;
+use App\Jobs\LogOrderJob;
 use App\Jobs\SendInvoiceJob;
 
 class OrderService {
 
-     function place(array $data) {
+     static function create(Request $request) {
 
-        $order = Order::create([
-            'user_id' => $data['user_id'],
-            'price'   => $data['total'],
-            'status' => 'pending',
-        ]);
+        $order = new Order();
+        $order->user_id = $request->user_id;
+        $order->price = $request->price;
+        $order->save();
+    
 
         SendInvoiceJob::dispatch($order);
 

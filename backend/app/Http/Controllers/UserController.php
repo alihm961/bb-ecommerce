@@ -44,4 +44,15 @@ class UserController extends Controller
         if (!$response)  return $this->responseJSON(null, 'Failed to log out', 400);
         return $this->responseJSON(null, 'Logged out successfully');
     }
+
+
+    function getUsers(){
+        try {
+            $users = UserService::getUsers();
+            if(!$users) return $this->responseJSON(null, 'Failed to get all users', 500);
+            return $this->responseJSON($users, 'Users fetched successfully');
+        } catch (\Throwable $th) {
+            return $this->responseJSON(null, 'Failed to get all users', 500);
+        }
+    }
 }

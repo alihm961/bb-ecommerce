@@ -7,10 +7,8 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use PHPOpenSourceSaver\JWTAuth\Facades\JWTAuth;
 
-class UserService
-{
-    public static function register($request)
-    {
+class UserService{
+    public static function register($request){
         $user = new User();
         $user->name     = $request->name;
         $user->email    = $request->email;
@@ -27,8 +25,7 @@ class UserService
     }
 
 
-    public static function login($request)
-    {
+    public static function login($request){
         $credentials = $request->only('email', 'password');
 
         $token = JWTAuth::attempt($credentials);
@@ -43,5 +40,10 @@ class UserService
             'token' => $token,
             'user' => $user,
         ];
+    }
+
+    static function getUsers(){
+        $users = User::all();
+        return $users;
     }
 }
