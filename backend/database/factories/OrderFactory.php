@@ -19,6 +19,7 @@ class OrderFactory extends Factory
         return [
             'user_id' => fake()->numberBetween(1, 30),
             'status' => fake()->randomElement(['pending', 'processing', 'shipped', 'delivered']),
+            'items_count' => fake()->randomNumber(),
             'price' => fake()->randomFloat(2, 5, 9999),
         ];
     }

@@ -30,6 +30,7 @@ class OrderService {
         $order = new Order();
         $order->user_id = $request->user_id;
         $order->price = $total_price;
+        $order->items_count = count($products);
         $order->save();
     
 

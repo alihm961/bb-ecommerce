@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-use App\Models\OrderItem;
+use App\Models\Order;
 use App\Models\OrderPerHour;
 use App\Models\Product;
 use Carbon\Carbon;
@@ -10,8 +10,7 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 
-class JobService
-{
+class JobService{
    static function sendMail($order){
        $user = $order->user;
        $email = $user->email;
@@ -64,16 +63,14 @@ class JobService
 
 
    static function addOrderItems($id, $products){
-       foreach($products as $p){
-            $prod = Product::find($p['id']);
-            $order_item = new OrderItem();
+    $order = Order::find($id);
+    foreach($products as $p){
+        $prod = Product::find($p['id']);
 
-            $order_item->order_id = $id;
-            $order_item->product_id = $p["id"];
-            $order_item->quantity = $p['quantity'];
-            $order_item->price = $p['quantity'] * $prod->price;
-
-            $order_item->save();
-       }
+        $order->products()->attach($prod->id, [
+            'quantity' => $p['quantity'],
+            'price' => $p['quantity'] * $prod->price
+        ]);
+    }
    }
 }
