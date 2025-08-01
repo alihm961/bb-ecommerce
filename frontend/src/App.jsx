@@ -1,35 +1,35 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { Routes, Route, Navigate } from 'react-router-dom';
 
-function App() {
-  const [count, setCount] = useState(0)
+
+import LandingPage from './pages/LandingPage/LandingPage';
+import CatalogPage from './pages/CatalogPage/CatalogPage';
+import ProductDetail from './pages/ProductDetailPage/ProductDetailPage';
+import CartPage from './pages/CartPage/CartPage';
+import AuthPage from './pages/AuthPage/AuthPage';
+import OrdersPage from './pages/OrdersPage/OrdersPage';
+import NotificationsPage from './pages/Notifications/Notifications';
+
+export default function App() {
+  const { user } = useAuth();
+
+  const ProtectedRoute = ({ children, roles }) => {
+    if (!user) return <Navigate to="/auth" />;
+    if (roles && !roles.includes(user.role)) return <Navigate to="/" />;
+    return children;
+  };
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <Routes>
+      <Route path="/" element={<LandingPage />} />
+      <Route path="/catalog" element={<CatalogPage />} />
+      <Route path="/product/:id" element={<ProductDetail />} />
+      <Route path="/cart" element={<CartPage />} />
+      <Route path="/auth" element={<AuthPage />} />
+      <Route path="/orders" element={<ProtectedRoute><OrdersPage /></ProtectedRoute>} />
+      <Route path="/admin" element={<ProtectedRoute roles={['admin']}><AdminDashboard /></ProtectedRoute>} />
+      <Route path="/jobs" element={<ProtectedRoute roles={['admin']}><JobQueuePage /></ProtectedRoute>} />
+      <Route path="/notifications" element={<ProtectedRoute><NotificationsPage /></ProtectedRoute>} />
+    </Routes>
+  );
 }
 
-export default App
