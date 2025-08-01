@@ -13,9 +13,9 @@ return new class extends Migration
     {
         Schema::create('order_per_hours', function (Blueprint $table) {
             $table->id();
-            $table->dateTime('hour');
-            $table->integer('order_count');
-            $table->decimal('revenue', 10, 2);
+            $table->timestamp('hour')->useCurrent()->unique();
+            $table->integer('order_count')->default(0);
+            $table->decimal('revenue', 10, 2)->default(0);
             $table->timestamps();
         });
     }

@@ -13,7 +13,7 @@ class OrderController extends Controller{
     public function create(OrderCreateRequest $request){
         try {
             $order = OrderService::create($request);
-            if(!$order) return $this->responseJSON(null, 'Failed to add order', 500);
+            if(is_array($order)) return $this->responseJSON($order, 'failed', 400);
             return $this->responseJSON($order, 'Order placed and invoice sent', 201);
         } catch (\Throwable $th) {
             return $this->responseJSON(null, 'Failed to add order', 500);

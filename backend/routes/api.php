@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\FakeController;
 use App\Http\Controllers\ProductController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
@@ -7,6 +8,10 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\OrderController;
 
 Route::group(['prefix' => 'v1'], function () {
+
+    // Fake Controller works as a delivery company, 
+    Route::post('/delivery-company', [FakeController::class, 'sendOrder']);
+
 
     Route::group(['prefix' => 'guest'], function () {
         Route::post('/register', [UserController::class, 'register']);
@@ -20,7 +25,6 @@ Route::group(['prefix' => 'v1'], function () {
         Route::group(['prefix' => 'user'], function () {
             Route::post('/logout', [UserController::class, 'logout']);
             Route::post('/orders', [OrderController::class, 'create']);
-
         });
     
         Route::group(['prefix' => 'admin'], function () {
