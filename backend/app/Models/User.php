@@ -40,4 +40,12 @@ class User extends Authenticatable implements JWTSubject
     function orders(): HasMany {
         return $this->hasMany(Order::class);
     }
+
+    function notifications(): HasMany {
+        return $this->hasMany(Notification::class);
+    }
+
+    function adminLogs(): HasMany {
+        return $this->hasMany(AdminLogs::class);
+    }
 }

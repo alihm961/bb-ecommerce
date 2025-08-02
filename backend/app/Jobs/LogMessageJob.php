@@ -4,14 +4,16 @@ namespace App\Jobs;
 
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
-use App\Services\JobService;
+use App\Services\JobOrderService;
 
 class LogMessageJob implements ShouldQueue
 {
     use Queueable;
 
     public $order;
-
+    public $tries = 10;
+    public $backoff = 20;
+    
     public function __construct($order)
     {
         $this->order = $order;
@@ -19,6 +21,6 @@ class LogMessageJob implements ShouldQueue
 
     public function handle(): void
     {
-        JobService::logMessage($this->order);
+        JobOrderService::logMessage($this->order);
     }
 }

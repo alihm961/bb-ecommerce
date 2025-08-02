@@ -4,7 +4,7 @@ namespace App\Jobs;
 
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
-use App\Services\JobService;
+use App\Services\JobOrderService;
 
 class AddOrderItemsJob implements ShouldQueue
 {
@@ -12,6 +12,8 @@ class AddOrderItemsJob implements ShouldQueue
 
    public $id;
    public $products;
+   public $tries = 10;
+   public $backoff = 20;
 
     public function __construct($id, $products){
         $this->id = $id;
@@ -19,6 +21,6 @@ class AddOrderItemsJob implements ShouldQueue
     }
 
     public function handle(): void{
-        JobService::addOrderItems($this->id, $this->products);
+        JobOrderService::addOrderItems($this->id, $this->products);
     }
 }

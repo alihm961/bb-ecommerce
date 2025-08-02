@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 
-class JobService{
+class JobOrderService{
    static function sendMail($order){
        $user = $order->user;
        $email = $user->email;

@@ -7,6 +7,5 @@ use Illuminate\Database\Eloquent\Model;
 
 class OrderPerHour extends Model
 {
-    /** @use HasFactory<\Database\Factories\OrderPerHourFactory> */
     use HasFactory;
 }

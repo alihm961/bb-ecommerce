@@ -2,8 +2,10 @@
 
 namespace App\Services;
 
+use App\Jobs\AdminAuditJob;
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class ProductService
@@ -20,6 +22,9 @@ class ProductService
         $product->stock = $request->stock;
 
         $product->save();
+
+        $user = Auth::user();
+        AdminAuditJob::dispatch($user->id, "Admin {$user->name} created product of id#{$product->id}");
 
         return $product;
     }
@@ -38,6 +43,10 @@ class ProductService
         $product->stock = $request->stock ? $request->stock : $product->stock;
 
         $product->save();
+
+        $user = Auth::user();
+        AdminAuditJob::dispatch($user->id, "Admin {$user->name} updated product of id#{$product->id}");
+
 
         return $product;
     }
@@ -78,5 +87,16 @@ class ProductService
         } catch (\Throwable $th) {
             return null;
         }
+    }
+
+    static function delete($id){
+        $product = Product::find($id);
+        if ($product->delete()) {
+            $user = Auth::user();
+            AdminAuditJob::dispatch($user->id, "Admin {$user->name} deleted product of id#{$product->id}");
+            return true;
+        }
+
+        return null;
     }
 }

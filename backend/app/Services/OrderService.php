@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Jobs\AddNotificationJob;
 use App\Models\Order;
 use Illuminate\Http\Request;
 use App\Jobs\SendInvoiceJob;
@@ -10,8 +11,10 @@ use App\Jobs\OrderPerHourJob;
 use App\Jobs\WebhookJob;
 use App\Jobs\UpdateStockJob;
 use App\Jobs\AddOrderItemsJob;
+use App\Jobs\AdminAuditJob;
+use App\Models\OrderPerHour;
 use App\Models\Product;
-use Exception;
+use Illuminate\Support\Facades\Auth;
 
 class OrderService {
 
@@ -42,5 +45,43 @@ class OrderService {
         AddOrderItemsJob::dispatch($order->id, $products);
 
         return $order;
+    }
+
+    static function getAll(){
+        $orders = Order::with('user:id,name')->get();
+        return $orders;
+    }
+
+    static function updateOrder(Request $request, $id){
+        $order = Order::find($id);
+        $order->status = $request->status;
+        $order->save();
+
+        $user = Auth::user();
+
+        AddNotificationJob::dispatch($order);
+        AdminAuditJob::dispatch($user->id, "Admin {$user->name} updated order of id#{$order->id} to {$order->status}");
+
+        return $order;
+    }
+
+    static function analytics(Request $request){
+        $date = $request->query('date');
+
+        $orders = Order::whereDate('created_at', $date ?? now())->get();
+        $orders_per_hour = OrderPerHour::whereDate('created_at', $date ?? now())->get();
+
+        $total_items = 0;
+        $total_price = 0;
+        foreach($orders as $order){
+            $total_items += $order->items_count;
+            $total_price += $order->price;
+        }
+        
+        return [
+            "Items sold" => $total_items,
+            "Revenue" => $total_price,
+            "orders per hour" => $orders_per_hour
+        ];
     }
 }
