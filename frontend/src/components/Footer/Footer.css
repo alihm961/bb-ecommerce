@@ -1,0 +1,112 @@
+
+@font-face {
+  font-family: 'Sansation';
+  src: url('../../assets/fonts/sansation/Sansation-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Sansation';
+  src: url('../../assets/fonts/sansation/Sansation-Bold.ttf') format('truetype');
+  font-weight: bold;
+  font-style: normal;
+}
+
+.footer {
+  background-color: #3A6EA5;
+  color: white;
+  text-align: center;
+  padding: 30px 10px;
+  font-family: inter;
+  height: 150px;
+
+}
+
+.footer-top {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  font-family: 'Sansation';
+  margin-bottom: 10px;
+  flex-wrap: wrap;
+}
+
+.footer-logo {
+  width: 80px;
+  height: 80px;
+}
+
+.footer-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.footer-icons {
+  display: flex;
+  justify-content: center;
+  gap: 70px;
+  margin-bottom: 30px;
+  flex-wrap: wrap;
+}
+
+.footer-icons img {
+  width: 28px;
+  height: 28px;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.footer-icons img:hover {
+  transform: scale(1.1);
+}
+
+.footer-bottom {
+  font-size: 1.2rem;
+}
+
+
+@media (max-width: 768px) {
+  .footer-title {
+    font-size: 1.3rem;
+  }
+
+  .footer-icons img {
+    width: 22px;
+    height: 22px;
+  }
+
+  .footer-bottom {
+    font-size: 0.85rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .footer-top {
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .footer-logo {
+    width: 35px;
+    height: 35px;
+  }
+
+  .footer-title {
+    font-size: 1.2rem;
+  }
+
+  .footer-icons {
+    gap: 10px;
+  }
+
+  .footer-icons img {
+    width: 20px;
+    height: 20px;
+  }
+
+  .footer-bottom {
+    font-size: 0.8rem;
+  }
+}
