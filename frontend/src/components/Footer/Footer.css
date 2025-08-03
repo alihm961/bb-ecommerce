@@ -19,7 +19,9 @@
   text-align: center;
   padding: 30px 10px;
   font-family: inter;
-  height: 150px;
+  min-height: 120px;
+  flex-direction: column;
+  justify-content: space-between;
 
 }
 
@@ -78,8 +80,11 @@
   }
 
   .footer-bottom {
-    font-size: 0.85rem;
-  }
+  font-size: 1.2rem;
+  background-color: #3A6EA5; 
+  padding: 10px 0;
+  margin-top: auto; 
+}
 }
 
 @media (max-width: 480px) {
