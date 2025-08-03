@@ -6,8 +6,7 @@ use App\Services\JobOrderService;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 
-class WebhookJob implements ShouldQueue
-{
+class WebhookJob implements ShouldQueue{
     use Queueable;
 
     public $order;

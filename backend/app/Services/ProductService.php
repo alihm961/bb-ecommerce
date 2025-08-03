@@ -6,12 +6,13 @@ use App\Jobs\AdminAuditJob;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
+use Symfony\Component\Uid\Uuid;
 
-class ProductService
-{
-    static function create(Request $request)
-    {
+class ProductService{
+    static function create(Request $request){
         $product = new Product();
 
         $product->name = $request->name;
@@ -31,8 +32,7 @@ class ProductService
 
 
 
-    static function update(Request $request, $id)
-    {
+    static function update(Request $request, $id){
         $product = Product::find($id);
 
         $product->name = $request->name ? $request->name : $product->name;
@@ -43,18 +43,19 @@ class ProductService
         $product->stock = $request->stock ? $request->stock : $product->stock;
 
         $product->save();
+        Cache::flush();
+        
+        // cache::tags('products')->flush(); when use redis
 
         $user = Auth::user();
         AdminAuditJob::dispatch($user->id, "Admin {$user->name} updated product of id#{$product->id}");
-
 
         return $product;
     }
 
 
 
-    static function getOne($id)
-    {
+    static function getOne($id){
         try {
             $product = Product::find($id);
             return $product;
@@ -64,29 +65,32 @@ class ProductService
     }
 
 
-    static function getAll(Request $request)
-    {
-        $search = $request->query('search');
-        $category = $request->query('category');
-        $min_price = $request->query('min-price');
-        $max_price = $request->query('max-price');
+    static function getAll(Request $request){
+        // $search = $request->query('search');
+        // $category = $request->query('category');
+        // $min_price = $request->query('min-price');
+        // $max_price = $request->query('max-price');
 
-        try {
+        $filters = $request->only(['search', 'category', 'min-price', 'max-price']);
+        $filters['page'] = $request->query('page', 1);
 
+        $cash_key = 'Products' . json_encode([$filters]);
+
+        $data = Cache::rememberForever($cash_key, function () use ($filters) {    
+            
+            Log::info('Cache Test');
             $query = Product::query();
-
-            if ($search) $query->where('name', 'like', "%$search%");
-            if ($category) $query->where('category', $category);
-            if ($min_price) $query->where('price', '>=', $min_price);
-            if ($max_price) $query->where('price', '<=', $max_price);
-
-            $products = $query->paginate(15)->items();
-            $total = $query->paginate(15)->total();
-
-            return ['products' => $products, 'total' => $total];
-        } catch (\Throwable $th) {
-            return null;
-        }
+    
+            if (!empty($filters['search'])) $query->where('name', 'like', "%" . $filters['search'] . "%");
+            if (!empty($filters['category'])) $query->where('category', $filters['category']);
+            if (isset($filters['min-price'])) $query->where('price', '>=', $filters['min-price']);
+            if (isset($filters['max-price'])) $query->where('price', '<=', $filters['max-price']);
+            
+            $paginated = $query->paginate(15);
+            return ['products' => $paginated->items(), 'total' => $paginated->total()];
+        });
+    
+        return $data;
     }
 
     static function delete($id){
@@ -94,6 +98,9 @@ class ProductService
         if ($product->delete()) {
             $user = Auth::user();
             AdminAuditJob::dispatch($user->id, "Admin {$user->name} deleted product of id#{$product->id}");
+            
+            // Cache::tags('products')->flush();   when use redis
+            Cache::flush();
             return true;
         }
 

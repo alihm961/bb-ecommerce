@@ -6,8 +6,7 @@ use App\Services\JobOrderService;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 
-class UpdateStockJob implements ShouldQueue
-{
+class UpdateStockJob implements ShouldQueue{
     use Queueable;
 
     public $products;

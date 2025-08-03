@@ -9,8 +9,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use App\Services\JobOrderService;
 
-class SendInvoiceJob implements ShouldQueue
-{
+class SendInvoiceJob implements ShouldQueue{
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     public $order;

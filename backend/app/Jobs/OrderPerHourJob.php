@@ -6,8 +6,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 use App\Services\JobOrderService;
 
-class OrderPerHourJob implements ShouldQueue
-{
+class OrderPerHourJob implements ShouldQueue{
     use Queueable;
 
     public $order;

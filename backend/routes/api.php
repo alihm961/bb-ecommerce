@@ -11,11 +11,13 @@ use Illuminate\Notifications\Events\NotificationSent;
 
 Route::group(['prefix' => 'v1'], function () {
 
-    // Fake Controller works as a delivery company, 
-    Route::post('/delivery-company', [FakeController::class, 'sendOrder']);
+    // Fake Controller works as a delivery company, this a quick way to make a limit rating 
+    Route::middleware('throttle:60,1')->group(function(){
+        Route::post('/delivery-company', [FakeController::class, 'sendOrder']);
+    });
 
 
-    Route::group(['prefix' => 'guest'], function () {
+    Route::group(['prefix' => 'guest', 'middleware' => 'throttle:guest'], function () {
         Route::post('/register', [UserController::class, 'register']);
         Route::post('/login',    [UserController::class, 'login']);
         Route::get('/products', [ProductController::class, 'getAll']);
@@ -24,7 +26,7 @@ Route::group(['prefix' => 'v1'], function () {
 
 
     Route::group(['middleware' => 'auth:api'], function() {
-        Route::group(['prefix' => 'user'], function () {
+        Route::group(['prefix' => 'user', 'middleware' => 'throttle:user'], function () {
             
             // user routes
             Route::post('/logout', [UserController::class, 'logout']);
@@ -38,7 +40,7 @@ Route::group(['prefix' => 'v1'], function () {
         });
     
         Route::group(['prefix' => 'admin'], function () {
-            Route::group(['middleware' => 'isAdmin'], function() {
+            Route::middleware(['isAdmin', 'throttle:admin'])->group(function() {
                 // user routes
                 Route::get('/users', [UserController::class, 'getUsers']);
 

@@ -11,6 +11,8 @@ class AdminAuditJob implements ShouldQueue{
 
     public $id;
     public $message;
+    public $tries = 10;
+   public $backoff = 20;
     
     public function __construct($id, $message){
         $this->id = $id;
