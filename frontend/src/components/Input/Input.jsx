@@ -1,16 +1,7 @@
 import React from 'react';
 import './Input.css';
 
-const Input = ({
-type = 'text',
-id,
-name,
-label,
-placeholder,
-value,
-onChange,
-required = false
-}) => {
+const Input = ({type = 'text', id, name, label, placeholder, value, onChange, required = false}) => {
 return (
     <div className="form-group">
     {label && (

@@ -1,0 +1,140 @@
+@font-face {
+  font-family: 'Sansation';
+  src: url('../../assets/fonts/Sansation/Sansation-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Sansation';
+  src: url('../../assets/fonts/Sansation/Sansation-Bold.ttf') format('truetype');
+  font-weight: bold;
+  font-style: normal;
+}
+
+body {
+  font-family: 'Sansation', sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+.product-container {
+  max-width: 1200px;
+  margin: 30px auto;
+  padding: 20px;
+}
+
+.product-content {
+  display: flex;
+  gap: 40px;
+  margin-bottom: 30px;
+}
+
+.product-image img {
+  width: 550px;
+  height: 550px;
+  padding: 5px;
+  border-radius: 8px;
+  object-fit: cover;
+}
+
+.product-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.product-info label {
+  font-weight: bold;
+  margin-top: 5px;
+  font-size: 1.1rem;
+  color: #333;
+}
+
+.product-info input {
+  padding: 8px 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  width: 500px;
+}
+
+.product-info input[readonly] {
+  background-color: #f9f9f9;
+}
+
+.quantity-input {
+  width: 200px !important;
+}
+
+.add-to-cart {
+  margin-top: 15px;
+  padding: 12px 25px;
+  background-color: #ff8c00;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 1rem;
+  width: 200px;
+  transition: background-color 0.3s;
+}
+
+.add-to-cart:hover {
+  background-color: #e67e00;
+}
+
+.product-description-wrapper {
+  display: flex;
+  gap: 40px;
+}
+
+.product-description {
+  width: calc(550px + 500px + 40px); 
+  max-width: 100%;
+}
+
+.product-description h3 {
+  font-size: 1.5rem;
+  color: #000000;
+  margin-bottom: 10px;
+}
+
+.product-description p {
+  padding: 15px;
+  border: 1px solid #ddd;
+  background-color: #f2f2f2;
+  border-radius: 5px;
+  line-height: 3;
+}
+
+@media (max-width: 768px) {
+  .product-content {
+    flex-direction: column;
+    gap: 20px;
+  }
+  
+  .product-image img {
+    width: 100%;
+    height: auto;
+  }
+  
+  .product-info input {
+    width: 100%;
+  }
+  
+  .add-to-cart {
+    width: 100%;
+  }
+  
+  .product-description-wrapper {
+    flex-direction: column;
+    gap: 20px;
+  }
+  
+  .product-description {
+    width: 100%;
+  }
+}
