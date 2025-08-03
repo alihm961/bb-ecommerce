@@ -1,0 +1,40 @@
+version: "3.8"
+
+services:
+  # Backend service (Laravel)
+  backend:
+    build: ./backend
+    ports:
+      - "8080:80"
+    container_name: bb-backend
+
+  # Frontend service (React + Vite)
+  frontend:
+    build: ./frontend
+    ports:
+      - "5173:5173"
+    container_name: bb-frontend
+
+  # Database service (MySQL)
+  database:
+    image: mysql:8.0
+    ports:
+      - "3307:3306"
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+      MYSQL_DATABASE: ecommerce_db
+    container_name: database
+
+  # phpMyAdmin service
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    ports:
+      - "8081:80"
+    environment:
+      PMA_HOST: database
+      PMA_PORT: 3306
+      PMA_USER: root
+      PMA_PASSWORD:
+    container_name: phpmyadmin
+    depends_on:
+      - database
