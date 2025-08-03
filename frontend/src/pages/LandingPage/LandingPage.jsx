@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Navbar from "../../components/Navbar/Navbar";
 import Footer from "../../components/Footer/Footer";
-import ImageSlider from "../../components/ImageSlider/ImageSlider";
+import ImageSlider from "../../components/ImageSlider/Imageslider";
 import "./LandingPage.css";
 
 import feature1 from "../../assets/images/fast.png";
