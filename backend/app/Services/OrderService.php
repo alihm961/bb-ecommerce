@@ -52,6 +52,11 @@ class OrderService {
         return $orders;
     }
 
+     static function getAllUserOrder($id){
+        $orders = Order::where('user_id', $id)->get();
+        return $orders;
+    }
+
     static function updateOrder(Request $request, $id){
         $order = Order::find($id);
         $order->status = $request->status;

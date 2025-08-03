@@ -31,6 +31,16 @@ class OrderController extends Controller{
         }
     }
 
+       function getUserOrders($id){
+        try {
+            $orders = OrderService::getAllUserOrder($id);
+            if(count($orders) === 0) return $this->responseJSON(null, "no orders for this user", 500);
+            return $this->responseJSON($orders, "User's Orders fetched successfully", 200);
+        } catch (\Throwable $th) {
+           return $this->responseJSON(null, "failed to get user's orders", 500);
+        }
+    }
+
 
     function updateOrder(Request $request, $id){
         try {
