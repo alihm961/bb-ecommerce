@@ -10,18 +10,15 @@ use App\Traits\ApiResponseTrait;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-class ProductCreateRequest extends FormRequest
-{
+class ProductCreateRequest extends FormRequest{
 
     use ApiResponseTrait;
 
-    public function authorize(): bool
-    {
+    public function authorize(): bool {
         return true;
     }
 
-    public function rules(): array
-    {
+    public function rules(): array {
         return [
             'name'     => 'required|string|max:255',
             'description'    => 'required',
@@ -32,8 +29,7 @@ class ProductCreateRequest extends FormRequest
         ];
     }
 
-    protected function failedValidation(Validator $validator)
-    {
+    protected function failedValidation(Validator $validator){
         $errors = (new ValidationException($validator))->errors();
         throw new HttpResponseException($this->responseJSON($errors, 'wrong inputs', 400));
     }

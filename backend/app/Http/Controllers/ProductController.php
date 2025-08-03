@@ -11,9 +11,7 @@ use App\Http\Requests\Product\ProductUpdateRequest;
 
 class ProductController extends Controller
 {
-
     use ApiResponseTrait;
-
 
     function create(ProductCreateRequest $request)
     {
@@ -39,19 +37,37 @@ class ProductController extends Controller
     }
 
 
-    function getOne($id)
-    {
-        $product = ProductService::getOne($id);
-        if (!$product) return $this->responseJSON(null, "Failed to get product number {$id}", 500);
+    function getOne($id){
+        try {
+            $product = ProductService::getOne($id);
+            if (!$product) return $this->responseJSON(null, "Failed to get product number {$id}", 500);
 
-        return $this->responseJSON($product, "Product fetched successfully", 200);
+            return $this->responseJSON($product, "Product fetched successfully", 200);
+        } catch (\Throwable $th) {
+            return $this->responseJSON(null, "Failed to get product number {$id}", 500);
+        }
     }
 
     function getAll(Request $request)
     {
-        $data = ProductService::getAll($request);
-        if (!$data) return $this->responseJSON(null, "Failed to get all products", 500);
+        // try {
+            $data = ProductService::getAll($request);
+            if (!$data) return $this->responseJSON(null, "Failed to get all products", 500);
 
-        return $this->responseJSON($data, "Products fetched successfully", 200);
+            return $this->responseJSON($data, "Products fetched successfully", 200);
+        // } catch (\Throwable $th) {
+        //     return $this->responseJSON(null, "Failed to get all products", 500);
+        // }
+    }
+
+    function delete($id){
+        try {
+            $data = ProductService::delete($id);
+            if (!$data) return $this->responseJSON(null, "Failed to delete products with id#{$id}", 500);
+    
+            return $this->responseJSON($data, "Product with id#{$id} deleted successfully", 200);
+        } catch (\Throwable $th) {
+            return $this->responseJSON(null, "Failed to delete products with id#{$id}", 500);
+        }
     }
 }
