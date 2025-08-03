@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from "react";
 import Navbar from "../../components/Navbar/Navbar";
 import Footer from "../../components/Footer/Footer";
-import ImageSlider from "../../components/ImageSlider/ImageSlider";
+import ImageSlider from "../../components/ImageSlider/Imageslider";
 import "./LandingPage.css";
 
 import feature1 from "../../assets/images/fast.png";
-import feature2 from "../../assets/images/sPayment.png";
-import feature3 from "../../assets/images/bestPrice.png";
+import feature2 from "../../assets/images/spayment.png";
+import feature3 from "../../assets/images/bestprice.png";
 import feature4 from "../../assets/images/24.jpeg";
-import feature5 from "../../assets/images/wideRange.jpg";
+import feature5 from "../../assets/images/widerange.jpg";
 
 import gaming from "../../assets/images/Gaming.jpg";
 import laptop from "../../assets/images/laptop.jpeg";
