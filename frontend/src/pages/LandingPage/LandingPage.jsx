@@ -5,15 +5,15 @@ import ImageSlider from "../../components/ImageSlider/ImageSlider";
 import "./LandingPage.css";
 
 import feature1 from "../../assets/images/fast.png";
-import feature2 from "../../assets/images/spayment.png";
-import feature3 from "../../assets/images/bestprice.png";
+import feature2 from "../../assets/images/sPayment.png";
+import feature3 from "../../assets/images/bestPrice.png";
 import feature4 from "../../assets/images/24.jpeg";
-import feature5 from "../../assets/images/widerange.jpg";
+import feature5 from "../../assets/images/wideRange.jpg";
 
 import gaming from "../../assets/images/Gaming.jpg";
 import laptop from "../../assets/images/laptop.jpeg";
 import mobile from "../../assets/images/phone.jpg";
-import home from "../../assets/images/homeapplianc.jpg";
+import home from "../../assets/images/homeAppliance.jpg";
 
 import user1 from "../../assets/images/woman.jpg";
 import user2 from "../../assets/images/man.jpg";

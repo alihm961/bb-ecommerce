@@ -2,6 +2,7 @@
 
 use App\Http\Middleware\isAdmin;
 use Illuminate\Foundation\Application;
+use App\Http\Middleware\CorsMiddleware;
 use Illuminate\Http\Middleware\HandleCors;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -17,6 +18,7 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->alias([
             'isAdmin' => isAdmin::class,
+            'cors' => CorsMiddleware::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

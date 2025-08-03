@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import "./ImageSlider.css";
-import img1 from "../../assets/images/herosection1.jpg";
-import img2 from "../../assets/images/herosection2.jpg";
-import img3 from "../../assets/images/herosection4.jpg";
+import img1 from "../../assets/images/heroSection1.jpg";
+import img2 from "../../assets/images/heroSection2.jpg";
+import img3 from "../../assets/images/heroSection4.jpg";
 import searchIcon from "../../assets/images/search.svg"; 
 
 const slides = [
@@ -46,7 +46,7 @@ const ImageSlider = () => {
             <h2>{slide.title}</h2>
             <p>{slide.subtitle}</p>
             <div className="search-bar">
-              <input className="sinput"
+              <input className="s-input"
                 type="text"
                 placeholder="Search products..."
                 value={searchInput}

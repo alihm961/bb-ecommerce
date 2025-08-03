@@ -137,17 +137,6 @@ body {
   line-height: 1.4;
 }
 
-/* nav,
-.imageslider {
-  margin: 0 !important;
-  padding: 0 !important;
-}
-
-.imageslider {
-  margin-top: -10px; 
-} */
-
-
 @media screen and (max-width: 1024px) {
   .section-title {
     font-size: 1.7rem;
