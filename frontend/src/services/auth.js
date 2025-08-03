@@ -1,7 +1,9 @@
 import apiClient from './apiClient';
 
-export const login = (credentials) => apiClient.post('/login', credentials);
-export const register = (data) => apiClient.post('/register', data);
-export const fetchMe = () => apiClient.get('/me');
-export const logout = () => apiClient.post('/logout');
-export const refreshToken = () => apiClient.post('/refresh');
+// Guest routes
+export const login = (credentials) => apiClient.post('/api/v1/guest/login', credentials);
+export const register = (data) => apiClient.post('/api/v1/guest/register', data);
+
+// Authenticated user routes
+export const logout = () => apiClient.post('/api/v1/user/logout');
+

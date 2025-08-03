@@ -10,7 +10,7 @@ import googleIcon from '../../assets/images/google.svg';
 
 export default function AuthPage() {
 const [isLogin, setIsLogin] = useState(true);
-const [form, setForm] = useState({ username: '', email: '', password: '' });
+const [form, setForm] = useState({ name: '', email: '', password: '' });
 const dispatch = useDispatch();
 const navigate = useNavigate();
 const { user, loading, error } = useSelector((state) => state.auth);
@@ -35,7 +35,8 @@ const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value }
       dispatch(loginUser({ email: form.email, password: form.password }));
     } else {
       if (form.password !== form.confirmPassword) return alert('Passwords do not match');
-      dispatch(registerUser({ username: form.username, email: form.email, password: form.password }));
+      dispatch(registerUser({ name: form.name, email: form.email, password: form.password,password_confirmation: form.confirmPassword }));
+      
     }
   };
 
@@ -56,14 +57,15 @@ return (
             {!isLogin && (
               <Input
                 type="text"
-                id="username"
-                name="username"
-                label="Username"
-                placeholder="Enter your username"
-                value={form.username}
+                id="name"
+                name="name"
+                label="Name"
+                placeholder="Enter your name"
+                value={form.name}
                 onChange={handleChange}
                 required
               />
+              
             )}
 
             <Input
@@ -75,7 +77,8 @@ return (
               value={form.email}
               onChange={handleChange}
               required
-            />
+              />
+              {error?.email && <p className="form-error">{error.email[0]}</p>}
 
             <Input
               type="password"
@@ -87,6 +90,7 @@ return (
               onChange={handleChange}
               required
             />
+            {error?.password && <p className="form-error">{error.password[0]}</p>}
 
             {!isLogin && (
               <Input
@@ -99,6 +103,7 @@ return (
                 onChange={handleChange}
                 required
               />
+              
             )}
 
             {isLogin && (
@@ -111,7 +116,15 @@ return (
               {loading ? 'Please wait...' : isLogin ? 'Login' : 'Register'}
             </button>
 
-            {error && <p className="form-error">{error}</p>}
+            {error && (
+          <div className="form-error">
+          {error.message && <p>{error.message}</p>}
+          {error.errors && Object.keys(error.errors).map((field) => (
+          <p key={field}>{error.errors[field][0]}</p>
+          ))}
+        </div>
+        )}
+
 
             <div className="auth-divider">
               <span></span>

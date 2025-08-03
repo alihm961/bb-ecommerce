@@ -1,13 +1,22 @@
+
 import axios from 'axios';
 
 const apiClient = axios.create({
-    baseURL: import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000/v1',
-    });
+baseURL: 'http://localhost:8000',
+headers: { 'Content-Type': 'application/json' },
+});
 
+// Auto-attach token
 apiClient.interceptors.request.use((config) => {
-    const token = localStorage.getItem('token');
-    if (token) config.headers.Authorization = `Bearer ${token}`;
-    return config;
+const token = localStorage.getItem('token');
+
+//remove auth header for guest
+if (token && !config.url.includes('/guest/')) {
+    config.headers.Authorization = `Bearer ${token}`;
+}
+
+
+return config;
 });
 
 export default apiClient;
