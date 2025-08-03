@@ -1,97 +1,85 @@
 
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { login, register, fetchMe, logout as logoutApi, refreshToken } from '../../services/auth';
+import { login, register, logout } from '../../services/auth';
 
-// Thunks
-export const loginUser = createAsyncThunk('auth/loginUser', async (credentials, { rejectWithValue }) => {
+export const loginUser = createAsyncThunk('auth/login', async (credentials, { rejectWithValue }) => {
   try {
     const { data } = await login(credentials);
+    localStorage.setItem('token', data.token);
     return data;
   } catch (err) {
-    return rejectWithValue(err.response?.data?.message || 'Login failed');
+    return rejectWithValue(err.response?.data || { message: 'Login failed' });
   }
 });
 
-export const registerUser = createAsyncThunk('auth/registerUser', async (userData, { rejectWithValue }) => {
-try {
-    const { data } = await register(userData);
-    return data;
-} catch (err) {
-    return rejectWithValue(err.response?.data?.message || 'Registration failed');
-}
-});
-
-export const getMe = createAsyncThunk('auth/getMe', async (_, { rejectWithValue }) => {
+export const registerUser = createAsyncThunk('auth/register', async (userData, { rejectWithValue }) => {
   try {
-    const { data } = await fetchMe();
-    return data;
+    const { data } = await register(userData);
+    localStorage.setItem('token', data.token);
+    return data; 
   } catch (err) {
-    return rejectWithValue(err.response?.data?.message || 'Failed to fetch user');
+    return rejectWithValue(err.response?.data || { message: 'Registration failed' });
   }
 });
 
-export const logoutUser = createAsyncThunk('auth/logoutUser', async () => {
-    await logoutApi();
-    return true;
+export const logoutUser = createAsyncThunk('auth/logout', async (_, { rejectWithValue }) => {
+  try {
+    await logout();
+    localStorage.removeItem('token');
+    return null;
+  } catch (err) {
+    return rejectWithValue(err.response?.data?.message || 'Logout failed');
+  }
 });
 
-export const refreshAuthToken = createAsyncThunk('auth/refreshToken', async () => {
-  const { data } = await refreshToken();
-  return data;
-});
-
-// Slice
 const authSlice = createSlice({
   name: 'auth',
   initialState: {
     user: null,
     token: localStorage.getItem('token') || null,
     loading: false,
-    error: null,
+    error: null,      
+    message: null     
   },
   reducers: {
-    clearError: (state) => { state.error = null; }
+    clearError: (state) => {
+      state.error = null;
+      state.message = null;
+    },
   },
   extraReducers: (builder) => {
-    // LOGIN
-    builder.addCase(loginUser.pending, (state) => { state.loading = true; state.error = null; });
-    builder.addCase(loginUser.fulfilled, (state, action) => {
-      state.loading = false;
-      state.user = action.payload.user;
-      state.token = action.payload.token;
-      localStorage.setItem('token', action.payload.token);
-    });
-    builder.addCase(loginUser.rejected, (state, action) => { state.loading = false; state.error = action.payload; });
-
-    // REGISTER
-    builder.addCase(registerUser.pending, (state) => { state.loading = true; state.error = null; });
-    builder.addCase(registerUser.fulfilled, (state, action) => {
-    state.loading = false;
-    state.user = action.payload.user;
-    state.token = action.payload.token;
-    localStorage.setItem('token', action.payload.token);
-    });
-    builder.addCase(registerUser.rejected, (state, action) => { state.loading = false; state.error = action.payload; });
-
-    // FETCH ME
-    builder.addCase(getMe.fulfilled, (state, action) => { state.user = action.payload; });
-
-    // LOGOUT
-    builder.addCase(logoutUser.fulfilled, (state) => {
-    state.user = null;
-    state.token = null;
-    localStorage.removeItem('token');
-    });
-
-    // REFRESH TOKEN
-    builder.addCase(refreshAuthToken.fulfilled, (state, action) => {
-    state.token = action.payload.token;
-    localStorage.setItem('token', action.payload.token);
-    });
-},
+    builder
+      // Login
+      .addCase(loginUser.pending, (state) => { state.loading = true; state.error = null; })
+      .addCase(loginUser.fulfilled, (state, action) => {
+        state.loading = false;
+        state.user = action.payload.user;
+        state.token = action.payload.token;
+      })
+      .addCase(loginUser.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload.errors || null;
+        state.message = action.payload.message || 'Login failed';
+      })
+      // Register
+      .addCase(registerUser.pending, (state) => { state.loading = true; state.error = null; })
+      .addCase(registerUser.fulfilled, (state, action) => {
+        state.loading = false;
+        state.user = action.payload.user;
+        state.token = action.payload.token;
+      })
+      .addCase(registerUser.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload.errors || null;
+        state.message = action.payload.message || 'Registration failed';
+      })
+      // Logout
+      .addCase(logoutUser.fulfilled, (state) => {
+        state.user = null;
+        state.token = null;
+      });
+  },
 });
 
 export const { clearError } = authSlice.actions;
 export default authSlice.reducer;
-
-
