@@ -1,0 +1,51 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use PHPOpenSourceSaver\JWTAuth\Contracts\JWTSubject;
+
+class User extends Authenticatable implements JWTSubject
+{
+    use HasFactory, Notifiable;
+
+    protected $fillable = [
+        'name',
+        'email',
+        'password',
+        'role',
+    ];
+
+    protected $hidden = [
+        'password',
+        'remember_token',
+    ];
+
+    
+    public function getJWTIdentifier()
+    {
+        return $this->getKey();
+    }
+
+    
+    public function getJWTCustomClaims()
+    {
+        return [];
+    }
+
+    function orders(): HasMany {
+        return $this->hasMany(Order::class);
+    }
+
+    function notifications(): HasMany {
+        return $this->hasMany(Notification::class);
+    }
+
+    function adminLogs(): HasMany {
+        return $this->hasMany(AdminLogs::class);
+    }
+}
