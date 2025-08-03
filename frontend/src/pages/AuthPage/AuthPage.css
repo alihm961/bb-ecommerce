@@ -7,16 +7,17 @@
 body {
   background-color: #ffffff;
 }
-.authContainer {
+
+.auth-container {
   display: flex;
   min-height: 100vh;
   align-items: center;
   justify-content: center;
-  padding: 1rem;
+  padding: 2rem;
   background: #fff;
 }
 
-.imageWrapper {
+.auth-image-wrapper {
   flex: 1;
   display: flex;
   justify-content: flex-end;
@@ -24,18 +25,12 @@ body {
   max-width: 50%;
 }
 
-.imageContainer {
-  max-width: 700px;
-  display: flex;
-  align-items: center;
-}
-
-.authImage {
+.auth-image {
   max-width: 100%;
   height: auto;
 }
 
-.formWrapper {
+.auth-form-wrapper {
   flex: 1;
   display: flex;
   justify-content: flex-start;
@@ -43,7 +38,7 @@ body {
   max-width: 50%;
 }
 
-.formContainer {
+.auth-form-container {
   background: #fff;
   padding: 3rem;
   border-radius: 8px;
@@ -51,124 +46,66 @@ body {
   max-width: 500px;
 }
 
-.title {
+.auth-title {
   font-size: 2rem;
   margin-bottom: 2rem;
   text-align: center;
   color: #333;
 }
 
-.form {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-
-.authButton {
-  width: 100%;
-  background: #FC7E00;
-  color: #fff;
-  border: none;
-  padding: 0.8rem;
-  border-radius: 4px;
-  font-size: 1.2rem;
-  font-weight: bold;
-  cursor: pointer;
-}
-
-.authButton:hover {
-  background: #ea560c;
-}
-
-.error {
-  color: red;
-  text-align: center;
-  margin-top: 0.5rem;
-}
-
-.forgotPasswordContainer {
-  text-align: right;
-}
-
-.forgotPassword {
-  font-size: 0.9rem;
-  color: #000;
-  text-decoration: none;
-}
-
-.orDivider {
+.auth-divider {
   display: flex;
   align-items: center;
   justify-content: center;
   margin: 1.5rem 0;
 }
 
-.orLine {
+.auth-divider span {
   flex: 1;
   height: 1px;
   background: #ddd;
 }
 
-.orText {
+.auth-divider p {
   padding: 0 1rem;
   color: #777;
 }
 
-.googleButton {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  background: #fff;
-  color: #333;
-  border: 1px solid #ddd;
-  padding: 0.8rem;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-.googleButton:hover {
-  background: #f5f5f5;
-}
-
-.googleIcon {
-  width: 20px;
-  height: 20px;
-}
-
-.toggleText {
+.auth-toggle-text {
   text-align: center;
   margin-top: 1.5rem;
   color: #777;
 }
 
-.toggleLink {
-  color: #FC7E00;
+.auth-toggle-text span {
+  color: var(--primary-color);
   cursor: pointer;
   font-weight: bold;
   margin-left: 0.5rem;
 }
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
 
 @media (max-width: 768px) {
-  .authContainer {
+  .auth-container {
     flex-direction: column;
     padding: 1rem;
   }
-
-  .imageWrapper,
-  .formWrapper {
+  .auth-image-wrapper,
+  .auth-form-wrapper {
     max-width: 100%;
     padding: 0;
     justify-content: center;
   }
-
-  .imageContainer {
+  .auth-image-wrapper {
     margin-bottom: 2rem;
-    max-width: 400px;
   }
-
-  .formContainer {
+  .auth-form-container {
     max-width: 100%;
   }
 }
+

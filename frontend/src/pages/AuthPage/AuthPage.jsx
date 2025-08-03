@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { loginUser, registerUser, clearError } from '../../store/slices/authSlice';
 import { useNavigate } from 'react-router-dom';
-import styles from './AuthPage.module.css';
+
 import Input from '../../components/Input/Input';
 import authImage from '../../assets/images/loginRegister.png';
 import googleIcon from '../../assets/images/google.svg';
@@ -44,18 +44,15 @@ const handleGoogleLogin = () => {
 };
 
 return (
-    <div className={styles.authContainer}>
-      <div className={styles.imageWrapper}>
-        <div className={styles.imageContainer}>
-          <img src={authImage} alt="Auth visual" className={styles.authImage} />
-        </div>
+    <div className="auth-container">
+      <div className="auth-image-wrapper">
+        <img src={authImage} alt="Authentication visual" className="auth-image" />
       </div>
+      <div className="auth-form-wrapper">
+        <div className="auth-form-container">
+          <h1 className="auth-title">{isLogin ? 'Login' : 'Create Account'}</h1>
 
-      <div className={styles.formWrapper}>
-        <div className={styles.formContainer}>
-          <h1 className={styles.title}>{isLogin ? 'Login' : 'Create Account'}</h1>
-
-          <form onSubmit={handleSubmit} className={styles.form}>
+          <form onSubmit={handleSubmit} className="auth-form">
             {!isLogin && (
               <Input
                 type="text"
@@ -68,6 +65,7 @@ return (
                 required
               />
             )}
+
             <Input
               type="email"
               id="email"
@@ -78,6 +76,7 @@ return (
               onChange={handleChange}
               required
             />
+
             <Input
               type="password"
               id="password"
@@ -88,6 +87,7 @@ return (
               onChange={handleChange}
               required
             />
+
             {!isLogin && (
               <Input
                 type="password"
@@ -98,41 +98,42 @@ return (
                 value={form.confirmPassword}
                 onChange={handleChange}
                 required
-            />
+              />
             )}
 
             {isLogin && (
-              <div className={styles.forgotPasswordContainer}>
-                <a href="/forgot-password" className={styles.forgotPassword}>Forgot password?</a>
-            </div>
+              <div style={{ textAlign: 'right' }}>
+                <a href="/forgot-password" className="forgot-password">Forgot password?</a>
+              </div>
             )}
 
-            <button type="submit" className={styles.authButton} disabled={loading}>
-            {loading ? 'Please wait...' : isLogin ? 'Login' : 'Register'}
+            <button type="submit" className="btn btn-primary" disabled={loading}>
+              {loading ? 'Please wait...' : isLogin ? 'Login' : 'Register'}
             </button>
 
-            {error && <p className={styles.error}>{error}</p>}
+            {error && <p className="form-error">{error}</p>}
 
-            <div className={styles.orDivider}>
-            <span className={styles.orLine}></span>
-            <span className={styles.orText}>or</span>
-            <span className={styles.orLine}></span>
+            <div className="auth-divider">
+              <span></span>
+              <p>or</p>
+              <span></span>
             </div>
 
-            <button type="button" className={styles.googleButton} onClick={handleGoogleLogin}>
-            <img src={googleIcon} alt="Google icon" className={styles.googleIcon} />
-            Continue with Google
+            <button type="button" className="btn btn-google" onClick={handleGoogleLogin}>
+              <img src={googleIcon} alt="Google icon" />
+              Continue with Google
             </button>
-        </form>
+          </form>
 
-        <p className={styles.toggleText}>
+          {/* Switch between login/register */}
+          <p className="auth-toggle-text">
             {isLogin ? "Don't have an account?" : 'Already have an account?'}
-            <span onClick={toggleMode} className={styles.toggleLink}>
-            {isLogin ? ' Register' : ' Login'}
+            <span onClick={toggleMode}>
+              {isLogin ? ' Register' : ' Login'}
             </span>
-        </p>
+          </p>
         </div>
+      </div>
     </div>
-    </div>
-);
+  );
 }

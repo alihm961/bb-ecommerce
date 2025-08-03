@@ -6,6 +6,9 @@ import store from './store';
 import App from './App';
 import './styles/globals.css';
 import './styles/variables.css';
+import './pages/AuthPage/AuthPage.css';
+import './components/Button/Button.css';
+import './components/Input/Input.css'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>

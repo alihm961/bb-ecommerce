@@ -1,0 +1,32 @@
+* {
+box-sizing: border-box;
+margin: 0;
+padding: 0;
+}
+
+body {
+font-family: 'Inter', sans-serif;
+background: #fff;
+color: #333;
+line-height: 1.5;
+}
+
+:root {
+--primary-color: #FC7E00;
+--primary-hover: #ea560c;
+--secondary-color: #333;
+--border-color: #ddd;
+--error-color: #e63946;
+}
+
+.container {
+max-width: 1200px;
+margin: 0 auto;
+padding: 0 1rem;
+}
+
+.flex-center {
+display: flex;
+justify-content: center;
+align-items: center;
+}
