@@ -5,7 +5,7 @@ import ImageSlider from "../../components/ImageSlider/Imageslider";
 import "./LandingPage.css";
 
 import feature1 from "../../assets/images/fast.png";
-import feature2 from "../../assets/images/sPayment.png";
+import feature2 from "../../assets/images/spayment.png";
 import feature3 from "../../assets/images/bestPrice.png";
 import feature4 from "../../assets/images/24.jpeg";
 import feature5 from "../../assets/images/wideRange.jpg";
