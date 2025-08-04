@@ -1,0 +1,77 @@
+.admin-page {
+  display: flex;
+  height: 100vh;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-color: #1c1c1c;
+}
+
+.main-content {
+  flex: 1;
+  padding: 50px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 30px;
+  opacity: 0.9;
+  box-sizing: border-box;
+}
+
+.inner-box {
+  background-color: #00264D;
+  padding: 50px;
+  border-radius: 20px;
+  width: 100%;
+  max-width: 1300px;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  opacity: 0.9;
+  gap: 1px;
+  box-sizing: border-box;
+}
+
+.content-area {
+  background-color: #003264;
+  padding: 30px;
+  border-radius: 10px;
+}
+
+
+@media (max-width: 1024px) {
+  .main-content {
+    padding: 30px;
+  }
+
+  .inner-box {
+    max-width: 90%;
+    padding: 30px;
+  }
+
+  .admin-button {
+    width: 100%;
+    text-align: center;
+  }
+}
+
+@media (max-width: 768px) {
+  .admin-page {
+    flex-direction: column;
+  }
+
+  .main-content {
+    padding: 20px;
+  }
+
+  .inner-box {
+    padding: 20px;
+    max-width: 100%;
+    min-height: auto;
+  }
+
+  .admin-button {
+    font-size: 0.9rem;
+  }
+}
