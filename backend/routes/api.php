@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\AiChatController;
 use App\Http\Controllers\FakeController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ProductController;
@@ -8,6 +9,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\OrderController;
 use Illuminate\Notifications\Events\NotificationSent;
+
 
 Route::group(['prefix' => 'v1'], function () {
     Route::middleware('cors')->group(function(){
@@ -36,6 +38,12 @@ Route::group(['prefix' => 'v1'], function () {
                 Route::post('/orders', [OrderController::class, 'create']);
                 Route::get('/orders/{id}', [OrderController::class, 'getUserOrders']);
                 
+                //Ai Routes
+                Route::group(['prefix'=>'ai'], function () {
+                    Route::post('/chat', [AiChatController::class, 'sendMessage']);
+                    Route::get('/chat/{session_id}',[AiChatController::class, 'getMessage']);
+                }); 
+
                 // notification routes
                 Route::get('/notifications/{id}', [NotificationController::class, 'getNotifications']);
                 Route::get('/read-notifications/{id}', [NotificationController::class, 'readNotifications']);
