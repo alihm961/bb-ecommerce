@@ -1,0 +1,90 @@
+.sidebar {
+  width: 220px;
+  height: 100vh;
+  background-color: #00152A;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 30px 10px;
+  color: white;
+  box-sizing: border-box;
+}
+
+.navbar-logo {
+  width: 120px;
+  height: auto;
+  margin-bottom: 40px;
+}
+
+.nav-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 30px;
+  width: 100%;
+  padding: 30px 10px;
+  background-color: #003264;
+  border-radius: 20px;
+  opacity: 0.5;
+  box-sizing: border-box;
+  height: calc(100% - 100px);
+}
+
+.nav-button {
+  width: 160px;
+  height: 150px;
+  background-color: #080a11;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  border-radius: 12px;
+  cursor: pointer;
+  font-size: 1.1rem;
+  transition: background-color 0.3s ease, opacity 0.3s ease;
+  opacity: 0.5;
+}
+
+.nav-button:hover {
+  opacity: 1;
+  background-color: #0d0f1a;
+}
+
+/* ✅ Responsive Sidebar */
+@media (max-width: 768px) {
+  .sidebar {
+    width: 100%;
+    height: auto;
+    flex-direction: row;
+    justify-content: space-around;
+    padding: 10px 0;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    z-index: 1000;
+  }
+
+  .navbar-logo {
+    display: none;
+  }
+
+  .nav-section {
+    flex-direction: row;
+    justify-content: space-around;
+    gap: 10px;
+    padding: 10px;
+    height: auto;
+    width: 100%;
+    background-color: #003264;
+    border-radius: 0;
+  }
+
+  .nav-button {
+    width: 60px;
+    height: 60px;
+    font-size: 0.75rem;
+    padding: 5px;
+    border-radius: 8px;
+  }
+}
