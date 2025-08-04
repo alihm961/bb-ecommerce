@@ -61,7 +61,7 @@ return (
                 name="name"
                 label="Name"
                 placeholder="Enter your name"
-                value={form.name}
+                value={form.name || ''}
                 onChange={handleChange}
                 required
               />
@@ -74,7 +74,7 @@ return (
               name="email"
               label="Email"
               placeholder="username@example.com"
-              value={form.email}
+              value={form.email || ''}
               onChange={handleChange}
               required
               />
@@ -86,7 +86,7 @@ return (
               name="password"
               label="Password"
               placeholder="********"
-              value={form.password}
+              value={form.password || ''}
               onChange={handleChange}
               required
             />
@@ -99,7 +99,7 @@ return (
                 name="confirmPassword"
                 label="Confirm Password"
                 placeholder="********"
-                value={form.confirmPassword}
+                value={form.confirmPassword || ''}
                 onChange={handleChange}
                 required
               />
