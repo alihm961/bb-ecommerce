@@ -12,6 +12,8 @@ use App\Jobs\WebhookJob;
 use App\Jobs\UpdateStockJob;
 use App\Jobs\AddOrderItemsJob;
 use App\Jobs\AdminAuditJob;
+use App\Jobs\AdminBroadcastJob;
+use App\Jobs\AdminUpdateBroadcastJob;
 use App\Models\OrderPerHour;
 use App\Models\Product;
 use Illuminate\Support\Facades\Auth;
@@ -43,6 +45,7 @@ class OrderService {
         WebhookJob::dispatch($order);
         UpdateStockJob::dispatch($products);
         AddOrderItemsJob::dispatch($order->id, $products);
+        AdminBroadcastJob::dispatch($order);
 
         return $order;
     }
@@ -66,6 +69,7 @@ class OrderService {
 
         AddNotificationJob::dispatch($order);
         AdminAuditJob::dispatch($user->id, "Admin {$user->name} updated order of id#{$order->id} to {$order->status}");
+        AdminUpdateBroadcastJob::dispatch($order);
 
         return $order;
     }
