@@ -1,0 +1,170 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', Tahoma;
+}
+
+body {
+  background-color: #ffffff;
+}
+
+.register-container {
+  display: flex;
+  min-height: 100vh;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  gap: 2rem;
+}
+
+.register-image-wrapper {
+  flex: 1;
+  display: flex;
+  justify-content: flex-end;
+  padding-right: 2rem;
+  max-width: 50%;
+}
+
+.register-image-container {
+  max-width: 700px;
+  display: flex;
+  align-items: center;
+}
+
+.register-image {
+  max-width: 100%;
+  height: auto;
+  object-fit: contain;
+}
+
+.register-form-wrapper {
+  flex: 1;
+  display: flex;
+  justify-content: flex-start;
+  padding-left: 2rem;
+  max-width: 50%;
+}
+
+.register-form-container {
+  background-color: white;
+  padding: 3rem;
+  border-radius: 8px;
+  width: 100%;
+  max-width: 500px;
+}
+
+.register-title {
+  font-size: 2rem;
+  margin-bottom: 3rem;
+  color: #333;
+  text-align: center;
+  text-decoration: underline;
+  text-decoration-color: #000000;
+  text-underline-offset: 8px;
+}
+
+.register-form {
+  width: 100%;
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.input-label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+  color: #333;
+  text-transform: lowercase;
+}
+
+.register-input {
+  width: 100%;
+  padding: 0.8rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+.register-input:focus {
+  outline: none;
+  border-color: #ea560c;
+}
+
+.register-button {
+  width: 100%;
+  background-color: #FC7E00;
+  color: white;
+  border: none;
+  padding: 0.8rem;
+  border-radius: 4px;
+  font-size: 1.3rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  margin-bottom: 1.5rem;
+  font-weight: bold;
+  text-transform: lowercase;
+}
+
+.register-button:hover {
+  background-color: #ea560c;
+}
+
+.login-text {
+  text-align: center;
+  margin-top: 1.5rem;
+  color: #777;
+}
+
+.login-link {
+  color: #FC7E00;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+@media (max-width: 1024px) {
+  .register-image-wrapper {
+    padding-right: 2rem;
+  }
+  .register-form-wrapper {
+    padding-left: 2rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .register-container {
+    flex-direction: column;
+    padding: 1rem;
+    gap: 1rem;
+  }
+
+  .register-image-wrapper,
+  .register-form-wrapper {
+    max-width: 100%;
+    padding: 0;
+    justify-content: center;
+  }
+
+  .register-image-container {
+    margin-bottom: 2rem;
+    max-width: 400px;
+  }
+
+  .register-form-container {
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .register-form-container {
+    padding: 2rem;
+  }
+
+  .register-title {
+    font-size: 1.5rem;
+    margin-bottom: 2.5rem;
+  }
+}
