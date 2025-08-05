@@ -13,11 +13,14 @@ use Symfony\Component\Uid\Uuid;
 
 class ProductService{
     static function create(Request $request){
+
+        $image = FileUploadService::base64_to_image($request->image_url);
+
         $product = new Product();
 
         $product->name = $request->name;
         $product->description = $request->description;
-        $product->image_url = $request->image_url;
+        $product->image_url = $image;
         $product->price = $request->price;
         $product->category = $request->category;
         $product->stock = $request->stock;

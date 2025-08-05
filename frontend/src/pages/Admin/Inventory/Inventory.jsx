@@ -1,40 +1,89 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 import AdminLayout from "../../../components/AdminLayout/AdminLayout";
-import "./Inventory.css"; 
-
-const sampleData = [
-  { id: 1, name: "Laptop", category: "Electronics", stock: 25, price: "$1000" },
-  { id: 2, name: "Phone", category: "Electronics", stock: 50, price: "$700" },
-  { id: 3, name: "Headphones", category: "Accessories", stock: 75, price: "$150" },
-  { id: 4, name: "Keyboard", category: "Peripherals", stock: 30, price: "$80" },
-  { id: 5, name: "Monitor", category: "Displays", stock: 20, price: "$300" },
-  { id: 6, name: "Chair", category: "Furniture", stock: 10, price: "$250" },
-  { id: 7, name: "Mouse", category: "Peripherals", stock: 60, price: "$50" },
-  { id: 8, name: "Tablet", category: "Electronics", stock: 15, price: "$500" },
-  { id: 9, name: "Webcam", category: "Peripherals", stock: 40, price: "$120" },
-  { id: 10, name: "Router", category: "Networking", stock: 18, price: "$90" }
-];
+import "./Inventory.css";
 
 const InventoryPage = () => {
-  const [products, setProducts] = useState(sampleData);
+  const [products, setProducts] = useState([]);
   const [selected, setSelected] = useState([]);
+  const [editedProducts, setEditedProducts] = useState({});
+  const token = localStorage.getItem("token");
+
+  useEffect(() => {
+    fetchProducts();
+  }, []);
+
+  const fetchProducts = async () => {
+    try {
+      const res = await axios.get("http://localhost:8000/api/v1/guest/products");
+      setProducts(res.data.data.products);
+    } catch (err) {
+      console.error("Failed to fetch products", err.response?.data || err);
+    }
+  };
 
   const toggleSelect = (id) => {
-    setSelected((prevSelected) =>
-      prevSelected.includes(id)
-        ? prevSelected.filter((item) => item !== id)
-        : [...prevSelected, id]
+    setSelected((prev) =>
+      prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]
     );
   };
 
-  const handleDelete = () => {
-    setProducts(products.filter((product) => !selected.includes(product.id)));
-    setSelected([]);
+  const handleFieldChange = (id, field, value) => {
+    setEditedProducts((prev) => ({
+      ...prev,
+      [id]: {
+        ...prev[id],
+        [field]: value,
+      },
+    }));
   };
 
-  const handleUpdate = () => {
-    alert("Update action for selected IDs: " + selected.join(", "));
-    // Implement actual update logic here
+  const handleUpdate = async () => {
+    try {
+      await Promise.all(
+        selected.map((id) => {
+          const product = editedProducts[id];
+          if (!product) return;
+
+          return axios.post(
+            `http://localhost:8000/api/v1/admin/update-product/${id}`,
+            product,
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          );
+        })
+      );
+
+      alert("Products updated successfully");
+      setSelected([]);
+      setEditedProducts({});
+      fetchProducts();
+    } catch (err) {
+      console.error(" Failed to update products", err.response?.data || err);
+    }
+  };
+
+  const handleDelete = async () => {
+    try {
+      await Promise.all(
+        selected.map((id) =>
+          axios.get(`http://localhost:8000/api/v1/admin/delete-product/${id}`, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          })
+        )
+      );
+
+      alert("🗑️ Products deleted successfully");
+      setSelected([]);
+      fetchProducts();
+    } catch (err) {
+      console.error("Failed to delete products", err.response?.data || err);
+    }
   };
 
   return (
@@ -43,11 +92,12 @@ const InventoryPage = () => {
         <div className="inventory-table">
           <div className="inventory-header">
             <div></div>
-            <div>Product Name:</div>
-            <div>Product Category:</div>
-            <div>Stock Number:</div>
-            <div>Price:</div>
+            <div>Product Name</div>
+            <div>Product Category</div>
+            <div>Stock Number</div>
+            <div>Price</div>
           </div>
+
           {products.map((product) => (
             <div className="inventory-row" key={product.id}>
               <div
@@ -56,18 +106,54 @@ const InventoryPage = () => {
               >
                 {selected.includes(product.id) && <span>✔</span>}
               </div>
-              <div><input type="text" value={product.name} readOnly /></div>
-              <div><input type="text" value={product.category} readOnly /></div>
-              <div><input type="number" value={product.stock} readOnly /></div>
-              <div><input type="text" value={product.price} readOnly /></div>
+              <div>
+                <input
+                  type="text"
+                  value={editedProducts[product.id]?.name ?? product.name}
+                  onChange={(e) =>
+                    handleFieldChange(product.id, "name", e.target.value)
+                  }
+                />
+              </div>
+              <div>
+                <input
+                  type="text"
+                  value={editedProducts[product.id]?.category ?? product.category}
+                  onChange={(e) =>
+                    handleFieldChange(product.id, "category", e.target.value)
+                  }
+                />
+              </div>
+              <div>
+                <input
+                  type="number"
+                  value={editedProducts[product.id]?.stock ?? product.stock}
+                  onChange={(e) =>
+                    handleFieldChange(product.id, "stock", e.target.value)
+                  }
+                />
+              </div>
+              <div>
+                <input
+                  type="text"
+                  value={editedProducts[product.id]?.price ?? product.price}
+                  onChange={(e) =>
+                    handleFieldChange(product.id, "price", e.target.value)
+                  }
+                />
+              </div>
             </div>
           ))}
         </div>
       </div>
 
       <div className="button-row">
-        <button className="update-btn" onClick={handleUpdate}>Update</button>
-        <button className="delete-btn" onClick={handleDelete}>Delete</button>
+        <button className="update-btn" onClick={handleUpdate}>
+          Update
+        </button>
+        <button className="delete-btn" onClick={handleDelete}>
+          Delete
+        </button>
       </div>
     </AdminLayout>
   );

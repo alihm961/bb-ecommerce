@@ -50,14 +50,14 @@ class ProductController extends Controller
 
     function getAll(Request $request)
     {
-        // try {
+        try {
             $data = ProductService::getAll($request);
             if (!$data) return $this->responseJSON(null, "Failed to get all products", 500);
 
             return $this->responseJSON($data, "Products fetched successfully", 200);
-        // } catch (\Throwable $th) {
-        //     return $this->responseJSON(null, "Failed to get all products", 500);
-        // }
+        } catch (\Throwable $th) {
+            return $this->responseJSON(null, "Failed to get all products", 500);
+        }
     }
 
     function delete($id){
