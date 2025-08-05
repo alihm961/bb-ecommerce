@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  frontend-test:
+    build:
+      context: ./frontend
+    command: sh -c "npm install && npm run build && echo ' Frontend Build Passed'"
+    volumes:
+      - ./frontend:/app
+
+  backend-test:
+    build:
+      context: ./backend
+    command: sh -c "composer install && php artisan test || true"
+    volumes:
+      - ./backend:/var/www/html

@@ -3,7 +3,6 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import LandingPage from './pages/LandingPage/LandingPage';
 // import CatalogPage from './pages/CatalogPage/CatalogPage';
 import ProductDetailPage from './pages/ProductDetailPage/ProductDetailPage';
-import AuthPage from './pages/AuthPage/AuthPage';
 import Login from './pages/AuthPage/Login';
 import Register from './pages/AuthPage/Register';
 import CartPage from "./pages/CartPage/CartPage";
