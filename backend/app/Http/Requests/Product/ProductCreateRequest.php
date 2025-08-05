@@ -22,7 +22,7 @@ class ProductCreateRequest extends FormRequest{
         return [
             'name'     => 'required|string|max:255',
             'description'    => 'required',
-            'image_url' => 'required|url',
+            'image_url' => 'required|string',
             'price'     => 'required|numeric|min:0',
             'category' => 'required|in:laptops,gaming,mobile phone,home appliances',
             'stock'     => 'required|integer|min:0',

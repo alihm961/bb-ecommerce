@@ -24,7 +24,7 @@ class ProductUpdateRequest extends FormRequest
     {
         return [
             'name'     => 'string|max:255',
-            'image_url' => 'url',
+            'image_url' => 'string',
             'price'     => 'numeric|min:0',
             'category' => 'in:laptops,gaming,mobile phone,home appliances',
             'stock'     => 'numeric|min:0',
