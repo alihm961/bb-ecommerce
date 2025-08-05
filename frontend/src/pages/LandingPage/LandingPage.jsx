@@ -76,7 +76,7 @@ const LandingPage = () => {
       <Navbar />
       <ImageSlider />
 
-      <section className="features-section">
+      <section id="features" className="features-section">
         <h2 className="section-title">Features</h2>
         <div className="features-grid">
           {features.map((feature, index) => (
@@ -88,7 +88,7 @@ const LandingPage = () => {
         </div>
       </section>
 
-      <section className="features-section">
+      <section id="categories" className="features-section">
         <h2 className="section-title">Categories</h2>
         <div className="features-grid">
           {categories.map((category, index) => (
