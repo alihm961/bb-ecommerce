@@ -6,12 +6,18 @@ import cartIcon from "../../assets/images/cart.svg";
 import listIcon from "../../assets/images/list.svg";
 import notificationIcon from "../../assets/images/notification.svg";
 import profileIcon from "../../assets/images/profile.svg";
+import { useNavigate } from "react-router-dom";
 
 const Navbar = () => {
   const [active, setActive] = useState("");
   const [showNotifications, setShowNotifications] = useState(false);
-  const notifWrapperRef = useRef();
+  const notifyWrapperRef = useRef();
+  const navigate = useNavigate();
 
+  const scrollToSection = (id) => {
+      const el = document.getElementById(id);
+      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    };
   const notifications = [
     { message: "New sign in to your account", time: "3 mins ago" },
     { message: "Order #1234 has shipped", time: "10 mins ago" },
@@ -25,8 +31,8 @@ const Navbar = () => {
 
   const handleClickOutside = (e) => {
     if (
-      notifWrapperRef.current &&
-      !notifWrapperRef.current.contains(e.target)
+      notifyWrapperRef.current &&
+      !notifyWrapperRef.current.contains(e.target)
     ) {
       setShowNotifications(false);
     }
@@ -44,11 +50,16 @@ const Navbar = () => {
       </div>
 
       <div className="navbar-center">
-        {["Features", "Categories", "Catalog"].map((item) => (
+        {["Catalog", "Features", "Categories"].map((item) => (
           <span
             key={item}
             className={`navbar-link ${active === item ? "active" : ""}`}
-            onClick={() => setActive(item)}
+          onClick={() => {
+            setActive(item);
+            if (item === "Features") scrollToSection("features");
+            if (item === "Categories") scrollToSection("categories");
+            if (item === "Catalog") navigate("/catalog");
+          }}
           >
             {item}
           </span>
@@ -60,7 +71,10 @@ const Navbar = () => {
           src={cartIcon}
           alt="Cart"
           className="navbar-icon"
-          onClick={() => setActive("Cart")}
+          onClick={() => {
+            setActive("Cart");
+            navigate("/cartpage");
+          }}
         />
         <img
           src={listIcon}
@@ -69,7 +83,7 @@ const Navbar = () => {
           onClick={() => setActive("List")}
         />
 
-        <div className="notification-wrapper" ref={notifWrapperRef} style={{ position: "relative" }}>
+        <div className="notification-wrapper" ref={notifyWrapperRef} style={{ position: "relative" }}>
           <img
             src={notificationIcon}
             alt="Notifications"
@@ -88,7 +102,10 @@ const Navbar = () => {
           src={profileIcon}
           alt="Profile"
           className="navbar-icon"
-          onClick={() => setActive("Profile")}
+          onClick={() => {
+            setActive("Profile")
+            navigate("/userdashboard")
+          }}
         />
       </div>
     </nav>
