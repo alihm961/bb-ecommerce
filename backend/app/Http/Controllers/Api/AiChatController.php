@@ -1,61 +1,34 @@
 <?php
-
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Message\SendChatMessageRequest;
-use App\Models\ChatMessage;
-use App\Models\ChatSession;
-use Illuminate\Support\Facades\Auth;
+use App\Services\ChatService;
 use App\Traits\ApiResponseTrait;
-use App\Jobs\ProcessChatMessageJob;
-use Illuminate\Http\Request;
 
 class AiChatController extends Controller
 {
     use ApiResponseTrait;
+    protected ChatService $chatService;
+
+    public function __construct(ChatService $chatService)
+    {
+        $this->chatService = $chatService;
+    }
 
     public function sendMessage(SendChatMessageRequest $request)
     {
-        $user = Auth::user();
-        $sessionId = $request->input('session_id');
+        $result = $this->chatService->sendMessage(
+            $request->input('session_id'),
+            $request->input('message')
+        );
 
-        
-        if(!$sessionId) {
-            $session = ChatSession::create([
-                'user_id' => $user->id,
-                'status' => 'active',
-            ]);
-            $sessionId = $session->id;
-        } else {
-            $session = ChatSession::where('id', $sessionId)
-            ->where('user_id',$user->id)
-            ->firstOrFail();
-        }
-        
-        //store the message
-        $message = ChatMessage::create([
-            'session_id' => $sessionId,
-            'sender_type' => 'user',
-            'sender_id' =>$user->id,
-            'content' => $request->input('message'),
-        ]);
-
-        ProcessChatMessageJob::dispatch($session, $message);
-
-        return $this->success([
-            'session_id' => $sessionId,
-            'message_id' => $message->id,
-        ],'Message sent successfully');
+        return $this->responseJSON($result, 'Message sent successfully');
     }
-    //chat history
-    public function getMessage($sessionId)
-    {
-        $session = ChatSession::where('id', $sessionId)
-        ->where('user_id', Auth::id())
-        ->with('messages')
-        ->firstOrFail();
 
-    return $this->success($session->messages,'Chat history fetched');
+    public function getMessages($sessionId)
+    {
+        $messages = $this->chatService->getMessages($sessionId);
+        return $this->responseJSON($messages, 'Chat history fetched');
     }
 }
