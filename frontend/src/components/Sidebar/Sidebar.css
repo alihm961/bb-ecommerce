@@ -51,6 +51,11 @@
   background-color: #0d0f1a;
 }
 
+.sidebar a{
+  text-decoration: none;
+  color: white;
+}
+
 /* ✅ Responsive Sidebar */
 @media (max-width: 768px) {
   .sidebar {

@@ -1,51 +1,82 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import AdminLayout from "../../../components/AdminLayout/AdminLayout";
 import { LineChart, Line, XAxis, YAxis, Tooltip, CartesianGrid } from "recharts";
+import axios from "axios";
 import "./SalesUsers.css";
 
 const SalesUsers = () => {
   const [view, setView] = useState("table");
   const [selectedRowId, setSelectedRowId] = useState(null);
-  const [orderStatus, setOrderStatus] = useState({});
-
-  const toggleView = () => {
-    setView(view === "table" ? "graph" : "table");
-  };
-
-  const handleRowSelect = (id) => {
-    setSelectedRowId(id);
-  };
-
-  const handleStatusChange = (status) => {
-    if (selectedRowId !== null) {
-      setOrderStatus((prev) => ({ ...prev, [selectedRowId]: status }));
-    }
-  };
-
-  const data = [
-    { name: "Mon", revenue: 2400 },
-    { name: "Tue", revenue: 1398 },
-    { name: "Wed", revenue: 9800 },
-    { name: "Thu", revenue: 3908 },
-    { name: "Fri", revenue: 4800 },
-    { name: "Sat", revenue: 3800 },
-    { name: "Sun", revenue: 4300 },
-  ];
-
-  const statuses = ["Pending", "Processing", "Shipped", "Delivered"];
-  const statusColors = {
+  const [orders, setOrders] = useState([]);
+  const [statusColors] = useState({
     Pending: "#FF8C00",
     Processing: "#FFD700",
     Shipped: "#1E90FF",
     Delivered: "#32CD32",
+  });
+
+  const statuses = Object.keys(statusColors);
+
+  const fetchOrders = async () => {
+    try {
+      const response = await axios.get("http://localhost:8000/api/v1/admin/orders", {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+      setOrders(response.data.data);
+    } catch (error) {
+      console.error("Error fetching orders:", error);
+    }
   };
 
-  const orders = Array.from({ length: 12 }, (_, i) => ({
-    id: i,
-    user: "User " + (i + 1),
-    items: Math.floor(Math.random() * 10 + 1),
-    amount: Math.floor(Math.random() * 100 + 20),
-  }));
+  const updateOrderStatus = async (status) => {
+    if (!selectedRowId) return;
+    try {
+      await axios.post(
+        `http://localhost:8000/api/v1/admin/orders/${selectedRowId}`,
+        { status },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+      fetchOrders();
+    } catch (error) {
+      console.error("Failed to update status:", error);
+    }
+  };
+
+  const fetchGraphData = async () => {
+    try {
+      const res = await axios.get("http://localhost:8000/api/v1/admin/orders-analytics", {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+      const perHour = res.data.data["orders per hour"];
+      setGraphData(
+        perHour.map((hour) => ({
+          name: hour.hour,
+          revenue: hour.total_price,
+        }))
+      );
+    } catch (error) {
+      console.error("Error fetching analytics:", error);
+    }
+  };
+
+  const [graphData, setGraphData] = useState([]);
+
+  const toggleView = () => {
+    setView((prev) => (prev === "table" ? "graph" : "table"));
+  };
+
+  useEffect(() => {
+    fetchOrders();
+    fetchGraphData();
+  }, []);
 
   return (
     <AdminLayout>
@@ -54,7 +85,7 @@ const SalesUsers = () => {
           <LineChart
             width={800}
             height={400}
-            data={data}
+            data={graphData}
             margin={{ top: 20, right: 30, left: 0, bottom: 0 }}
           >
             <CartesianGrid strokeDasharray="3 3" />
@@ -66,26 +97,26 @@ const SalesUsers = () => {
         ) : (
           <div className="sales-table">
             <div className="table-header">
-              <div>Order Number / Status</div>
+              <div>Order ID / Status</div>
               <div>User</div>
-              <div>Number of Items</div>
-              <div>Amount Spent</div>
+              <div>Items</div>
+              <div>Amount</div>
             </div>
             {orders.map((order) => (
               <div
                 key={order.id}
                 className={`table-row ${selectedRowId === order.id ? "selected" : ""}`}
-                onClick={() => handleRowSelect(order.id)}
+                onClick={() => setSelectedRowId(order.id)}
               >
                 <div
                   className="status-cell"
-                  style={{ backgroundColor: statusColors[orderStatus[order.id]] || "#ccc" }}
+                  style={{ backgroundColor: statusColors[order.status] || "#ccc" }}
                 >
-                  #{order.id + 1000}
+                  #{order.id}
                 </div>
-                <div>{order.user}</div>
-                <div>{order.items}</div>
-                <div>${order.amount}</div>
+                <div>{order.user?.name || "Unknown"}</div>
+                <div>{order.items_count}</div>
+                <div>${order.price}</div>
               </div>
             ))}
           </div>
@@ -102,7 +133,7 @@ const SalesUsers = () => {
               key={status}
               className="status-btn"
               style={{ backgroundColor: statusColors[status] }}
-              onClick={() => handleStatusChange(status)}
+              onClick={() => updateOrderStatus(status)}
             >
               {status}
             </button>
