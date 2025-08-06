@@ -5,6 +5,7 @@ namespace App\Jobs;
 use App\Models\ChatMessage;
 use App\Models\ChatSession;
 use App\Services\AiService;
+use App\Services\ChatService;
 use App\Events\ChatResponseReceived;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -25,9 +26,9 @@ class ProcessChatMessageJob implements ShouldQueue
         $this->message = $message;
     }
 
-    public function handle(AiService $aiService)
+    public function handle(AiService $aiService, ChatService $chatService)
     {
-        // Build conversation context
+        // Build context
         $context = $this->session->messages()
             ->latest()
             ->take(10)
@@ -39,17 +40,22 @@ class ProcessChatMessageJob implements ShouldQueue
             ])
             ->toArray();
 
-        // Get AI response
+        
         $aiResponse = $aiService->generateResponse($context);
 
-        // Store AI response in DB
+        // Escalation if Ai fails
+        if (!$aiResponse) {
+            $chatService->notifyAdmins($this->session);
+            $aiResponse = "Sorry, I couldn't process that request. An admin has been notified.";
+        }
+
         $reply = ChatMessage::create([
             'session_id' => $this->session->id,
             'sender_type' => 'ai',
-            'content' => $aiResponse ?? "Sorry, I couldn't process that request.",
+            'content' => $aiResponse,
         ]);
 
-        // Broadcast to frontend
+        // Broadcast
         broadcast(new ChatResponseReceived($this->session->id, $reply))->toOthers();
     }
 }

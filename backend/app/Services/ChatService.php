@@ -1,12 +1,13 @@
 <?php
 
 namespace App\Services;
-
+use App\Models\User;
 use App\Models\ChatMessage;
 use App\Models\ChatSession;
 use App\Jobs\ProcessChatMessageJob;
 use Illuminate\Support\Facades\Auth;
 use App\Events\ChatResponseReceived;
+use App\Events\ChatEscalated;
 
 class ChatService
 {
@@ -72,17 +73,43 @@ class ChatService
 
         $aiResponse = $aiService->generateResponse($context);
 
-        $reply = ChatMessage::create([
-            'session_id' => $session->id,
-            'sender_type' => 'ai',
-            'content' => $aiResponse ?? "Sorry, I couldn't process that request.",
+        // Escalate to admins
+    if (!$aiResponse) {
+        $this->notifyAdmins($session);
+
+        $fallbackMessage = "Sorry, I couldn't process that request. An admin has been notified.";
+        } else {
+        $fallbackMessage = $aiResponse;
+        }
+
+    $reply = ChatMessage::create([
+        'session_id' => $session->id,
+        'sender_type' => 'ai',
+        'content' => $fallbackMessage,
+        
+    ]);
+
+
+
+    broadcast(new ChatResponseReceived($session->id, $reply))->toOthers();
+
+    return $reply;
+}
+    
+
+public function notifyAdmins(ChatSession $session)
+{
+    $admins = User::where('role', 'admin')->get();
+    foreach ($admins as $admin) {
+        $admin->notifications()->create([
+            'message' => "Chat #{$session->id} has been escalated and requires attention.",
+            'is_read' => 0,
         ]);
-
-        // Broadcast AI response
-        broadcast(new ChatResponseReceived($session->id, $reply))->toOthers();
-
-        return $reply;
     }
+        broadcast(new ChatEscalated($session->id))->toOthers();
+        
+    }
+    
 
     private function getUserSession(int $sessionId, int $userId): ChatSession
     {

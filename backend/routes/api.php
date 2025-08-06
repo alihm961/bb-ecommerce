@@ -41,7 +41,7 @@ Route::group(['prefix' => 'v1'], function () {
                 //Ai Routes
                 Route::group(['prefix'=>'ai'], function () {
                     Route::post('/chat', [AiChatController::class, 'sendMessage']);
-                    Route::get('/chat/{session_id}',[AiChatController::class, 'getMessage']);
+                    Route::get('/chat/{session_id}',[AiChatController::class, 'getMessages']);
                 }); 
 
                 // notification routes
