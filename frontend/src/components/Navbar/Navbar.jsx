@@ -1,32 +1,46 @@
+// src/components/Navbar/Navbar.jsx
 import React, { useState, useEffect, useRef } from "react";
 import NotificationPanel from "../NotificationBell/NotificationBell";
 import "./Navbar.css";
-import logo from "../../assets/images/ByteBazaar_Logo.svg";
+import logo from "../../assets/images/whiteLogo.svg";
 import cartIcon from "../../assets/images/cart.svg";
-import listIcon from "../../assets/images/list.svg";
 import notificationIcon from "../../assets/images/notification.svg";
 import profileIcon from "../../assets/images/profile.svg";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const Navbar = () => {
   const [active, setActive] = useState("");
   const [showNotifications, setShowNotifications] = useState(false);
+  const [notifications, setNotifications] = useState([]);
   const notifyWrapperRef = useRef();
   const navigate = useNavigate();
 
-  const scrollToSection = (id) => {
-      const el = document.getElementById(id);
-      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    };
-  const notifications = [
-    { message: "New sign in to your account", time: "3 mins ago" },
-    { message: "Order #1234 has shipped", time: "10 mins ago" },
-    { message: "Password changed successfully", time: "1 hour ago" },
-  ];
+  const userId = localStorage.getItem("user_id"); // Adjust this based on your auth logic
+  const token = localStorage.getItem("token");
+
+  const fetchNotifications = async () => {
+    try {
+      const response = await axios.get(
+        `http://localhost:8000/api/v1/user/notifications/${userId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      if (response.data?.data) {
+        setNotifications(response.data.data);
+      }
+    } catch (error) {
+      console.error("Failed to fetch notifications", error);
+    }
+  };
 
   const toggleNotifications = () => {
     setShowNotifications((prev) => !prev);
     setActive("Notifications");
+    if (!showNotifications) fetchNotifications();
   };
 
   const handleClickOutside = (e) => {
@@ -43,6 +57,11 @@ const Navbar = () => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  const scrollToSection = (id) => {
+    const el = document.getElementById(id);
+    if (el) el.scrollIntoView({ behavior: "smooth", block: "center" });
+  };
+
   return (
     <nav className="navbar">
       <div className="navbar-left">
@@ -54,12 +73,12 @@ const Navbar = () => {
           <span
             key={item}
             className={`navbar-link ${active === item ? "active" : ""}`}
-          onClick={() => {
-            setActive(item);
-            if (item === "Features") scrollToSection("features");
-            if (item === "Categories") scrollToSection("categories");
-            if (item === "Catalog") navigate("/catalog");
-          }}
+            onClick={() => {
+              setActive(item);
+              if (item === "Features") scrollToSection("features");
+              if (item === "Categories") scrollToSection("categories");
+              if (item === "Catalog") navigate("/catalog");
+            }}
           >
             {item}
           </span>
@@ -67,6 +86,26 @@ const Navbar = () => {
       </div>
 
       <div className="navbar-right">
+        <div
+          className="notification-wrapper"
+          ref={notifyWrapperRef}
+          style={{ position: "relative" }}
+        >
+          <img
+            src={notificationIcon}
+            alt="Notifications"
+            className={`navbar-icon ${
+              active === "Notifications" ? "active" : ""
+            }`}
+            onClick={toggleNotifications}
+          />
+          {showNotifications && (
+            <NotificationPanel
+              notifications={notifications}
+            />
+          )}
+        </div>
+
         <img
           src={cartIcon}
           alt="Cart"
@@ -76,35 +115,14 @@ const Navbar = () => {
             navigate("/cartpage");
           }}
         />
-        <img
-          src={listIcon}
-          alt="List"
-          className="navbar-icon"
-          onClick={() => setActive("List")}
-        />
-
-        <div className="notification-wrapper" ref={notifyWrapperRef} style={{ position: "relative" }}>
-          <img
-            src={notificationIcon}
-            alt="Notifications"
-            className={`navbar-icon ${active === "Notifications" ? "active" : ""}`}
-            onClick={toggleNotifications}
-          />
-          {showNotifications && (
-            <NotificationPanel
-              notifications={notifications}
-              onClose={() => setShowNotifications(false)}
-            />
-          )}
-        </div>
 
         <img
           src={profileIcon}
           alt="Profile"
           className="navbar-icon"
           onClick={() => {
-            setActive("Profile")
-            navigate("/userdashboard")
+            setActive("Profile");
+            navigate("/userdashboard");
           }}
         />
       </div>

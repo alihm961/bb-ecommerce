@@ -1,3 +1,4 @@
+// src/components/NotificationBell/NotificationBell.jsx
 import React from "react";
 import "./NotificationBell.css";
 import notifIcon from "../../assets/images/notification2.svg";
@@ -19,17 +20,15 @@ const NotificationPanel = ({ notifications }) => {
               <div className="notif-main">
                 <div className="notif-top">
                   <div className="notif-text">{notif.message}</div>
-                  <button className="mark-read-btn">Mark as read</button>
+                  {/* You can keep or remove the button if needed */}
+                  {/* <button className="mark-read-btn">Mark as read</button> */}
                 </div>
-                <div className="notif-time">{notif.time}</div>
+                <div className="notif-time">{notif.time || "Just now"}</div>
               </div>
             </div>
           </li>
         ))}
       </ul>
-      <div className="panel-footer">
-        <a href="#">See all</a>
-      </div>
     </div>
   );
 };

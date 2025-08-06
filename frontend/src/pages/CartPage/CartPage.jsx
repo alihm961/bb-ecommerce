@@ -94,7 +94,6 @@ const CartPage = () => {
           <div className="suggested-box"></div>
         </div>
       </div>
-      <Footer />
     </>
   );
 };

@@ -55,7 +55,7 @@ const Login = () => {
               type="text"
               id="email"
               name="email"
-              label="email"
+              label="Email"
               placeholder="Enter your email"
               value={formData.email}
               onChange={handleChange}
@@ -72,7 +72,7 @@ const Login = () => {
             />
             
             <div className="forgot-password-container">
-              <a href="/forgot-password" className="forgot-password">forget password?</a>
+              <a href="/forgot-password" className="forgot-password">forgot password?</a>
             </div>
             
             <button type="submit" className="login-button">login</button>
