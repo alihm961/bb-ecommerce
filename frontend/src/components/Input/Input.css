@@ -6,17 +6,22 @@
   display: block;
   margin-bottom: 0.5rem;
   font-weight: 500;
-  color: #333;
+  color: #333 !important; /* Force it */
   text-transform: lowercase;
 }
 
 .form-input {
   width: 100%;
   padding: 0.8rem;
-  border: 1px solid #ddd;
+  border: 1px solid #ddd !important;   
   border-radius: 4px;
   font-size: 1rem;
+  color: #333 !important;                
+  background-color: #fff !important;    
+  box-shadow: none !important;         
+  outline: none;                    
 }
+
 
 .form-input:focus {
   outline: none;
