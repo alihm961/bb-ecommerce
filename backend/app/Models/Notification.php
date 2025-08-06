@@ -10,6 +10,12 @@ class Notification extends Model
 {
     use HasFactory;
 
+    protected $fillable = ['message', 'is_read','user_id'];
+
+    protected $casts = [
+        'is_read' => 'boolean',
+    ];
+
     function user(): BelongsTo {
         return $this->belongsTo(User::class);
     }
