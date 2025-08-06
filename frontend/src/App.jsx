@@ -20,7 +20,6 @@ export default function App() {
       <Route path="/" element={<LandingPage />} />
       {/* <Route path="/catalog" element={<CatalogPage />} /> */}
       <Route path="/product/:id" element={<ProductDetailPage />} />
-      <Route path="/productdetails" element={<ProductDetailPage />} />
       <Route path="/userdashboard" element={<UserDashboardPage />} />
       
       <Route path="/login" element={<Login />}/>
