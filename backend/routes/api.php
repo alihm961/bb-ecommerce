@@ -65,7 +65,8 @@ Route::group(['prefix' => 'v1'], function () {
                     Route::post('/orders/{id}', [OrderController::class, 'updateOrder']);
                     Route::get('/orders-analytics', [OrderController::class, 'analytics']);
                     //admin reply
-                    Route::post('/chats/reply/{sessionId}', [AdminChatController::class, 'reply']);
+                    Route::get('/chats/escalated', [AdminChatController::class, 'escalatedChats']);
+                    Route::get('/chats/{sessionId}', [AdminChatController::class, 'chatHistory']);
                 });
             });
         });

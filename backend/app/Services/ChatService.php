@@ -100,12 +100,12 @@ class ChatService
 public function notifyAdmins(ChatSession $session)
 {
     $session->update(['status' => 'escalated']);
-    
+
     $admins = User::where('role', 'admin')->get();
     foreach ($admins as $admin) {
         $admin->notifications()->create([
-            'message' => "Chat #{$session->id} has been escalated and requires attention.",
-            'is_read' => 0,
+        'message' => "Chat #{$session->id} has been escalated and requires attention.",
+        'is_read' => 0,
         ]);
     }
         broadcast(new ChatEscalated($session->id))->toOthers();

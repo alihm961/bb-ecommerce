@@ -27,4 +27,20 @@ class AdminChatController extends Controller
 
         return $this->responseJSON($reply, 'Reply sent successfully');
     }
+
+    public function escalatedChats()
+{
+    $chats = \App\Models\ChatSession::where('status', 'escalated')
+        ->with('messages') // eager load messages
+        ->latest()
+        ->get();
+
+    return $this->responseJSON($chats, 'Escalated chats fetched');
+}
+public function chatHistory($sessionId)
+{
+    $session = \App\Models\ChatSession::with('messages')->findOrFail($sessionId);
+    return $this->responseJSON($session, 'Chat history fetched');
+}
+
 }

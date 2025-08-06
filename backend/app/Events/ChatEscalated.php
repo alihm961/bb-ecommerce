@@ -20,4 +20,8 @@ class ChatEscalated implements ShouldBroadcast
         return new Channel('chat.admin');
 
     }
+    public function broadcastAs()
+    {
+        return 'ChatEscalated';
+    }
 }
