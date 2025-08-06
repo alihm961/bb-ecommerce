@@ -99,6 +99,8 @@ class ChatService
 
 public function notifyAdmins(ChatSession $session)
 {
+    $session->update(['status' => 'escalated']);
+    
     $admins = User::where('role', 'admin')->get();
     foreach ($admins as $admin) {
         $admin->notifications()->create([
@@ -117,5 +119,27 @@ public function notifyAdmins(ChatSession $session)
             ->where('user_id', $userId)
             ->firstOrFail();
     }
+
+    public function replyAsAdmin(int $sessionId, string $message)
+{
+    $session = ChatSession::where('id', $sessionId)->firstOrFail();
+
+    if ($session->status !== 'escalated') {
+        throw new \Exception('This chat is not escalated.');
+    }
+
+    
+    $reply = ChatMessage::create([
+        'session_id' => $session->id,
+        'sender_type' => 'admin',
+        'content' => $message,
+    ]);
+
+    // Broadcast to the user
+    broadcast(new ChatResponseReceived($session->id, $reply))->toOthers();
+
+    return $reply;
+}
+
     
 }
