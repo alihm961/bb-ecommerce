@@ -29,7 +29,7 @@ const SalesUsers = () => {
       console.error("Error fetching orders:", error);
     }
   };
-
+  
   const updateOrderStatus = async (status) => {
     if (!selectedRowId) return;
     try {
@@ -47,7 +47,10 @@ const SalesUsers = () => {
       console.error("Failed to update status:", error);
     }
   };
-
+  
+  
+  
+  const [graphData, setGraphData] = useState([]);
   const fetchGraphData = async () => {
     try {
       const res = await axios.get("http://localhost:8000/api/v1/admin/orders-analytics", {
@@ -55,6 +58,8 @@ const SalesUsers = () => {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
       });
+      console.log(res.data.data);
+      
       const perHour = res.data.data["orders per hour"];
       setGraphData(
         perHour.map((hour) => ({
@@ -67,7 +72,6 @@ const SalesUsers = () => {
     }
   };
 
-  const [graphData, setGraphData] = useState([]);
 
   const toggleView = () => {
     setView((prev) => (prev === "table" ? "graph" : "table"));

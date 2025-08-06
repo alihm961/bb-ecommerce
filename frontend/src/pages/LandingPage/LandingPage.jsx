@@ -3,6 +3,8 @@ import Navbar from "../../components/Navbar/Navbar";
 import Footer from "../../components/Footer/Footer";
 import ImageSlider from "../../components/ImageSlider/Imageslider";
 import "./LandingPage.css";
+import axios from 'axios';
+import ProductItem from "../../components/ProductItem/ProductItem";
 
 import feature1 from "../../assets/images/fast.png";
 import feature2 from "../../assets/images/spayment.png";
@@ -63,16 +65,30 @@ const feedbacks = [
 
 const LandingPage = () => {
   const [currentFeedback, setCurrentFeedback] = useState(0);
+  const [products, setProducts] = useState([]);
+  const [category, setCategory] = useState("")
+  const [page, setPage] = useState(1);
+  const [pages, setPages] = useState(1);
+   
+
+  const getProducts = async () => {
+    const response = await axios.get(`http://localhost:8000/api/v1/guest/products?page=${page}&category=${category}`);
+
+    setProducts(response.data.data.products); 
+    setPages(Math.ceil(response.data.data.total / 15));
+  }
 
   useEffect(() => {
+    getProducts();
     const interval = setInterval(() => {
       setCurrentFeedback((prev) => (prev + 1) % feedbacks.length);
     }, 4000);
     return () => clearInterval(interval);
-  }, []);
+  }, [page, category]);
+  
 
   return (
-    <div>
+    <div className="landing-container">
       <Navbar />
       <ImageSlider />
 
@@ -92,7 +108,7 @@ const LandingPage = () => {
         <h2 className="section-title">Categories</h2>
         <div className="features-grid">
           {categories.map((category, index) => (
-            <div className="category-item" key={index}>
+            <div onClick={() => setCategory(category.title.toLowerCase())} className="category-item" key={index}>
               <img src={category.image} alt={category.title} />
               <h3>{category.title}</h3>
             </div>
@@ -100,7 +116,22 @@ const LandingPage = () => {
         </div>
       </section>
 
-      <section className="spacer-box"></section>
+      <section className="spacer-box">
+        <div className="products">
+        {
+          products.length === 0 ?( <h1>No Products</h1> ):
+          (products.map(product => {
+           return <ProductItem key={product.id} id={product.id} name={product.name} img={product.image_url} price={product.price}/>
+          }))
+        }
+        </div>
+
+        <div className="pagination">
+          <button onClick={() => setPage(prev => Math.max(1, prev - 1))}>&lt;</button>
+          <p>{page}</p>
+          <button onClick={() => setPage(prev => Math.min(prev + 1, pages))}>&gt;</button>
+        </div>
+      </section>
 
       <section className="feedback-section">
         <div
