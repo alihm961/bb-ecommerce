@@ -151,7 +151,7 @@ const InventoryPage = () => {
         <button className="update-btn" onClick={handleUpdate}>
           Update
         </button>
-        <button className="delete-btn" onClick={handleDelete}>
+        <button className="delete-button" onClick={handleDelete}>
           Delete
         </button>
       </div>

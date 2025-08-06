@@ -117,6 +117,9 @@ const LandingPage = () => {
       </section>
 
       <section className="spacer-box">
+
+        <h2 className="section-title">Catalog</h2>
+
         <div className="products">
         {
           products.length === 0 ?( <h1>No Products</h1> ):

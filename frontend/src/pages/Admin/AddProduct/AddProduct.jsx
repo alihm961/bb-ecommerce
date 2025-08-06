@@ -145,14 +145,15 @@ const AddProductPage = () => {
             </div>
           )}
 
+        </form>
         
+      </div>
           <div className="add-product-btn-container">
             <button type="submit" className="submit-btn">
               Add Product
             </button>
           </div>
-        </form>
-      </div>
+      
     </AdminLayout>
   );
 };

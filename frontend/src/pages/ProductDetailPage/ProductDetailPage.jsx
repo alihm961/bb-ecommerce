@@ -72,7 +72,6 @@ const ProductDetails = () => {
           </div>
         </div>
       </div>
-      <Footer />
     </div>
   );
 };
