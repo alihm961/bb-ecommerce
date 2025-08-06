@@ -28,7 +28,9 @@ const Login = () => {
       headers: { 'Content-type': 'application/json' }
     });
     console.log();
-    
+    //return the user object 
+    localStorage.setItem('user', JSON.stringify(response.data.data.user));
+
     localStorage.setItem('user_id', response.data.data.user.id);
     localStorage.setItem('token', response.data.data.token);
     navigate('/');

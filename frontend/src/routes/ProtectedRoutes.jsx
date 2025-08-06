@@ -1,11 +1,18 @@
 import { Navigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
 
 export default function ProtectedRoute({ children, roles }) {
-// const { user } = useSelector((state) => state.auth);
+    const token = localStorage.getItem('token');
+    const user = JSON.parse(localStorage.getItem('user') || '{}');
+    const role = user.role?.toLowerCase();
 
-// if (!user) return <Navigate to="/auth" />;
-// if (roles && !roles.includes(user.role)) return <Navigate to="/" />;
+    console.log("DEBUG:", { token, user, role, roles });
 
-return children;
+    if (!token) return <Navigate to="/login" />;
+    if (!role) return <div>Loading...</div>; // wait for user data
+
+    if (roles && !roles.map(r => r.toLowerCase()).includes(role)) {
+    return <Navigate to="/" />;
+}
+
+    return children;
 }
