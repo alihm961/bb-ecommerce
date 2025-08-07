@@ -3,12 +3,13 @@
 namespace App\Jobs;
 
 use App\Events\NewOrderCreated;
+use Carbon\Traits\Serialization;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Foundation\Queue\Queueable;
 
 class AdminBroadcastJob implements ShouldQueue{
     use Queueable;
-
     public $order;
     public function __construct($order){
         $this->order = $order;
