@@ -2,7 +2,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import NotificationPanel from "../NotificationBell/NotificationBell";
 import "./Navbar.css";
-import logo from "../../assets/images/whiteLogo.svg";
+import logo from "../../assets/images/whitelogo.svg";
 import cartIcon from "../../assets/images/cart.svg";
 import notificationIcon from "../../assets/images/notification.svg";
 import profileIcon from "../../assets/images/profile.svg";
