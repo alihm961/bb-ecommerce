@@ -10,6 +10,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 const Navbar = () => {
+  const [isLogin, setIsLogin] = useState(false);
   const [active, setActive] = useState("");
   const [showNotifications, setShowNotifications] = useState(false);
   const [notifications, setNotifications] = useState([]);
@@ -18,6 +19,11 @@ const Navbar = () => {
 
   const userId = localStorage.getItem("user_id"); // Adjust this based on your auth logic
   const token = localStorage.getItem("token");
+  const user = JSON.parse(localStorage.getItem("user"));
+
+  useEffect(() => {
+    if (token) setIsLogin(true);
+  }, []);
 
   const fetchNotifications = async () => {
     try {
@@ -100,9 +106,7 @@ const Navbar = () => {
             onClick={toggleNotifications}
           />
           {showNotifications && (
-            <NotificationPanel
-              notifications={notifications}
-            />
+            <NotificationPanel notifications={notifications} />
           )}
         </div>
 
@@ -122,9 +126,34 @@ const Navbar = () => {
           className="navbar-icon"
           onClick={() => {
             setActive("Profile");
-            navigate("/userdashboard");
+            if (user?.role === "admin") {
+              navigate("/admin/add-product");
+            } else {
+              navigate("/userdashboard");
+            }
           }}
         />
+        {!isLogin ? (
+          <button
+            onClick={() => {
+              navigate("/login");
+            }}
+          >
+            login
+          </button>
+        ) : (
+          <button
+            onClick={() => {
+              localStorage.removeItem("token");
+              localStorage.removeItem("user_id");
+              localStorage.removeItem("user");
+              setIsLogin(false);
+              navigate("/");
+            }}
+          >
+            Logout
+          </button>
+        )}
       </div>
     </nav>
   );

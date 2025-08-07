@@ -20,6 +20,35 @@
   transition: 0.3s ease;
 }
 
+.graph-section {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  align-items: flex-start;
+  margin-bottom: 30px;
+}
+
+.graph-controls {
+  display: flex;
+  gap: 30px;
+  align-items: center;
+  color: white;
+  font-size: 16px;
+}
+
+input[type="date"] {
+  padding: 8px 12px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  background-color: #f0f0f0;
+  color: #333;
+}
+
+.revenue-display {
+  font-weight: bold;
+}
+
+
 .toggle-btn:hover {
   background-color: #0078d4;
 }

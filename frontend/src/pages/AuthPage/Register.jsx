@@ -26,8 +26,9 @@ const Register = () => {
     const response = await axios.post('http://127.0.0.1:8000/api/v1/guest/register', formData, {
       headers: { 'Content-type': 'application/json' }
     });
-    localStorage.setItem('user_id', response.data.user.id);
-    localStorage.setItem('token', response.data.token);
+    
+    localStorage.setItem('user_id', response.data.data.user.id);
+    localStorage.setItem('token', response.data.data.token);
     navigate('/');
   };
 
