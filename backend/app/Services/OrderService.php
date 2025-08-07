@@ -51,12 +51,12 @@ class OrderService {
     }
 
     static function getAll(){
-        $orders = Order::with('user:id,name')->get();
+        $orders = Order::with('user:id,name')->orderBy('created_at', 'desc')->get();
         return $orders;
     }
 
      static function getAllUserOrder($id){
-        $orders = Order::where('user_id', $id)->get();
+        $orders = Order::where('user_id', $id)->orderBy('created_at', 'desc')->get();
         return $orders;
     }
 

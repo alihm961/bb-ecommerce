@@ -23,7 +23,6 @@ class NewOrderCreated implements ShouldBroadcast {
     public function broadcastOn(): array{
         return [
             new Channel('admin-order'),
-            new Channel("user-order-{$this->order->user_id}"),
         ];
     }
 
