@@ -1,7 +1,7 @@
 import React from 'react';
 import './Footer.css';
 
-import logo from '../../assets/images/ByteBazaar_Logo.svg'; 
+import logo from '../../assets/images/whitelogo.svg'; 
 import facebookIcon from '../../assets/images/facebook.svg';
 import instagramIcon from '../../assets/images/instagram.svg';
 import emailIcon from '../../assets/images/email.svg';

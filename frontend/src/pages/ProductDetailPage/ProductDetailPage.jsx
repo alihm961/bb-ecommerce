@@ -10,13 +10,24 @@ import { addToCart } from "../../store/cartslice";
 const ProductDetails = () => {
   const [product, setProduct] = useState({});
   const [quantity, setQuantity] = useState(1);
+  const [message, setMessage] = useState("");
+  const [messageType, setMessageType] = useState(""); // "success" or "error"
   const { id } = useParams();
   const dispatch = useDispatch();
 
   useEffect(() => {
     const getProduct = async () => {
-      const response = await axios.get(`http://localhost:8000/api/v1/guest/products/${id}`);
-      setProduct(response.data.data);
+      try {
+        const response = await axios.get(`http://localhost:8000/api/v1/guest/products/${id}`);
+        setProduct(response.data.data);
+      } catch {
+        setMessage("Failed to fetch product details.");
+        setMessageType("error");
+        setTimeout(() => {
+          setMessage("");
+          setMessageType("");
+        }, 3000);
+      }
     };
     getProduct();
   }, [id]);
@@ -27,13 +38,26 @@ const ProductDetails = () => {
   };
 
   const handleAddToCart = () => {
-    dispatch(addToCart({
-      id: product.id,
-      title: product.name,
-      price: product.price,
-      quantity: quantity,
-      image: `http://localhost:8000/storage/${product.image_url}`,
-    }));
+    try {
+      dispatch(addToCart({
+        id: product.id,
+        title: product.name,
+        price: product.price,
+        quantity: quantity,
+        image: `http://localhost:8000/storage/${product.image_url}`,
+      }));
+
+      setMessage("Product added to cart successfully!");
+      setMessageType("success");
+    } catch{
+      setMessage("Something went wrong. Please try again.");
+      setMessageType("error");
+    }
+
+    setTimeout(() => {
+      setMessage("");
+      setMessageType("");
+    }, 3000);
   };
 
   return (
@@ -62,6 +86,12 @@ const ProductDetails = () => {
               className="quantity-input"
             />
             <button className="add-to-cart" onClick={handleAddToCart}>Add To Cart</button>
+
+            {message && (
+              <div className={`cart-message ${messageType}`}>
+                {message}
+              </div>
+            )}
           </div>
         </div>
 
@@ -72,6 +102,7 @@ const ProductDetails = () => {
           </div>
         </div>
       </div>
+      <Footer />
     </div>
   );
 };
