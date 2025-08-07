@@ -75,6 +75,23 @@
   filter: brightness(0) invert(58%) sepia(84%) saturate(643%) hue-rotate(352deg) brightness(102%) contrast(101%);
 }
 
+.navbar-right button {
+  background-color: #FC7E00;
+  color: white;
+  border: none;
+  padding: 0.8rem;
+  border-radius: 4px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  font-weight: bold;
+}
+
+.login-button:hover {
+  background-color: #ea560c;
+}
+
+
 
 
 @media screen and (max-width: 1024px) {
