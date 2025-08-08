@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\Api;
-
+use App\Models\ChatSession;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Services\ChatService;
@@ -30,7 +30,7 @@ class AdminChatController extends Controller
 
     public function escalatedChats()
 {
-    $chats = \App\Models\ChatSession::where('status', 'escalated')
+    $chats = ChatSession::where('status', 'escalated')
         ->with('messages') // eager load messages
         ->latest()
         ->get();
@@ -39,7 +39,7 @@ class AdminChatController extends Controller
 }
 public function chatHistory($sessionId)
 {
-    $session = \App\Models\ChatSession::with('messages')->findOrFail($sessionId);
+    $session = ChatSession::with('messages')->findOrFail($sessionId);
     return $this->responseJSON($session, 'Chat history fetched');
 }
 
